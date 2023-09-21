@@ -1,3 +1,7 @@
+using iText.Kernel.XMP.Options;
+using Microsoft.EntityFrameworkCore;
+using Persistencia;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +10,16 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<AppFarmaciaContext>(Options =>
+{
+    string connectionString = builder.Configuration.GetConnectionString("ConexMysql");
+    Options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+});
+
+
+
+
 
 var app = builder.Build();
 
