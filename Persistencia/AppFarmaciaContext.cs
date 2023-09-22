@@ -13,6 +13,6 @@ public class AppFarmaciaContext : DbContext
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
-
+    
     
 }
