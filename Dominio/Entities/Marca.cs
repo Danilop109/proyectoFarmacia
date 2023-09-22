@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace Dominio.Entities
 {
-    public class Marca
+    public class Marca: BaseEntity
     {
-        
+        public string Nombre {get; set;}
     }
 }
