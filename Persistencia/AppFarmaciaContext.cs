@@ -1,18 +1,49 @@
-
 using System.Reflection;
+using Dominio.Entities;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace Persistencia;
-public class AppFarmaciaContext : DbContext
-{
-    public AppFarmaciaContext(DbContextOptions options) : base(options)
+    public class ApiFarmaciaContext : DbContext
     {
-    }
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public ApiFarmaciaContext(DbContextOptions options) : base(options)
+        {
+        }
+
+        public DbSet<Ciudad> Ciudades { get; set; }
+        public DbSet<ContactoPersona> ContastosPersonas { get; set; }
+        public DbSet<Departamento> Departamentos {get; set;}
+        public DbSet<DetalleMovInventario> DetalleMovInventarios {get; set;}
+        public DbSet<Direccion> Direcciones {get; set;}
+        public DbSet<Factura> Facturas {get; set;}
+        public DbSet<FormaPago> FormasPagos {get; set;}
+        public DbSet<Inventario> Inventarios {get; set;}
+        public DbSet<Marca> Marcas {get; set;}
+        public DbSet<MedicamentoRecetado> MedicamentoRecetados {get; set;}
+        public DbSet<MovimientoInventario> MovimientoInventarios {get; set;}
+        public DbSet<Pais> Paises {get; set;}
+        public DbSet<Persona> Personas {get; set;}
+        public DbSet<Presentacion> Presentaciones {get; set;}
+        public DbSet<Producto> Productos {get; set;}
+        public DbSet<ProductoProveedor> ProductoProveedores {get; set;}
+        public DbSet<RecetaMedica> RecetaMedicas {get; set;}
+        public DbSet<Rol> Rols {get; set;}
+        public DbSet<TipoContacto> TipoContactos {get; set;}
+        public DbSet<TipoDocumento> TipoDocumentos {get; set;}
+        public DbSet<TipoMovInventario> TipoMovInventarios {get; set;}
+        public DbSet<TipoPersona> TipoPersonas {get; set;}
+        public DbSet<User> Users {get; set;}
+        public DbSet<UserRol> UserRols {get; set;}
+
+
+
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
+    }
+
     
-    
-}
