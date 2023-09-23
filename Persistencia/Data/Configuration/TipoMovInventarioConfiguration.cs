@@ -8,11 +8,11 @@ namespace Persistencia.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<TipoMovInventario> builder)
         {
-            builder.ToTable("tipoMovInventario");
+            builder.ToTable("tipoMovimientoInventario");
 
             builder.Property(p => p.Nombre)
             .HasColumnName("nombre")
-            .HasColumnType("string")
+            .HasColumnType("varchar")
             .IsRequired()
             .HasMaxLength(100);
         }
