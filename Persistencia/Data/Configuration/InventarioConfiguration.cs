@@ -12,34 +12,31 @@ namespace Persistencia.Data.Configuration
 
             builder.Property(p => p.Nombre)
             .HasColumnName("nombre")
-            .HasColumnType("string")
+            .HasColumnType("varchar")
             .IsRequired()
             .HasMaxLength(100);
 
             builder.Property(p => p.Stock)
             .HasColumnName("stock")
             .HasColumnType("int")
-            .IsRequired()
-            .HasMaxLength(100000);
+            .IsRequired();
+
 
             builder.Property(p => p.StockMin)
             .HasColumnName("stockMin")
             .HasColumnType("int")
-            .IsRequired()
-            .HasMaxLength(1000);
+            .IsRequired();
 
 
             builder.Property(p => p.StockMax)
             .HasColumnName("stockMax")
             .HasColumnType("int")
-            .IsRequired()
-            .HasMaxLength(10000);
+            .IsRequired();
 
             builder.Property(p => p.FechaExpiracion)
             .HasColumnName("fechaExpiracion")
-            .HasColumnType("DateTime")
-            .IsRequired()
-            .HasMaxLength(100);
+            .HasColumnType("DateOnly")
+            .IsRequired();
 
             builder.HasOne(p => p.Presentacion)
             .WithMany(p => p.Inventarios)

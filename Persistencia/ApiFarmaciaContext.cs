@@ -37,10 +37,8 @@ namespace Persistencia;
         public DbSet<RefreshToken> RefreshTokens {get; set;}
         public DbSet<MovimientoInventario> ResponsableCollection {get; set;}
         public DbSet<MovimientoInventario> ReceptorCollection {get; set;}
-        public DbSet<RecetaMedica> PacienteCollection
-
-
-
+        public DbSet<RecetaMedica> PacienteCollection {get; set;}
+        public DbSet<RecetaMedica> DoctorCollection {get; set;}
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

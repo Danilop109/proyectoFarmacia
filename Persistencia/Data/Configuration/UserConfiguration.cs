@@ -30,7 +30,7 @@ namespace Persistencia.Data.Configuration
             .HasColumnName("Password")
             .HasColumnType("varchar")
             .IsRequired()
-            .HasMaxLength(20);
+            .HasMaxLength(200);
 
             builder
             .HasMany(n => n.Rols)

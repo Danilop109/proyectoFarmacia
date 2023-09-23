@@ -20,7 +20,7 @@ namespace Persistencia.Data.Configuration
             .HasColumnName("numero")
             .HasColumnType("varchar")
             .IsRequired()
-            .HasMaxLength(30);
+            .HasMaxLength(10);
 
             builder.HasOne(p => p.Persona)
             .WithMany(p => p.ContactoPersonas)

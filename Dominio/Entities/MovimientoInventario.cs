@@ -7,8 +7,8 @@ namespace Dominio.Entities
 {
     public class MovimientoInventario : BaseEntity
     {
-        public DateTime FechaVencimiento {get; set;}
-        public DateTime FechaMovimiento {get; set;}
+        public DateOnly FechaVencimiento {get; set;}
+        public DateOnly FechaMovimiento {get; set;}
         public int IdResponsableFk { get; set; }
         public Persona ResponsableFk {get; set;}
         public int IdReceptorFk {get; set;}
