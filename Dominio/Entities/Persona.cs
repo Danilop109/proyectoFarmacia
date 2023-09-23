@@ -18,5 +18,6 @@ namespace Dominio.Entities;
         public ICollection<RecetaMedica> PacienteCollection {get; set;}
         public ICollection<MovimientoInventario> ResponsableCollection {get; set;}
         public ICollection<MovimientoInventario> ReceptorCollection {get; set;}
+        public ICollection<ContactoPersona> ContactoPersonas {get; set;}
 
     }
