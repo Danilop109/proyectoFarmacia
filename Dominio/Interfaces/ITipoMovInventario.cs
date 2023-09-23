@@ -2,8 +2,10 @@ using Dominio.Entities;
 
 namespace Dominio.Interfaces
 {
-    public interface ITipoMovInventario : IGnericRepository<TipoMovInventario>
+    public interface ITipoMovInventario : IGenericRepository<TipoMovInventario>
     {
         
     }
+
+
 }

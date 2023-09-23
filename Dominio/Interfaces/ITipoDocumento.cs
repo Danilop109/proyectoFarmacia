@@ -2,7 +2,7 @@ using Dominio.Entities;
 
 namespace Dominio.Interfaces
 {
-    public interface ITipoDocumento : IGenericRepepository<TipoDocumento>
+    public interface ITipoDocumento : IGenericRepository<TipoDocumento>
     {
         
     }

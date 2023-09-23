@@ -9,7 +9,7 @@ namespace Dominio.Entities
     {
         public DateTime FechaVencimiento {get; set;}
         public DateTime FechaMovimiento {get; set;}
-        public int IdResponsable { get; set; }
+        public int IdResponsableFk { get; set; }
         public Persona ResponsableFk {get; set;}
         public int IdReceptorFk {get; set;}
         public Persona ReceptorFk {get; set;}
@@ -21,6 +21,9 @@ namespace Dominio.Entities
         public RecetaMedica RecetaMedica {get; set;}
         public ICollection<DetalleMovInventario> DetalleMovInventarios {get; set;}
         public ICollection<Factura> Facturas {get; set;}
+        public ICollection<Producto> Productos {get; set;} = new HashSet<Producto>();   
+
+
 
 
     }
