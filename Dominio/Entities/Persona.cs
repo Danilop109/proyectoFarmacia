@@ -1,5 +1,7 @@
 
 
+using iText.Commons.Actions;
+
 namespace Dominio.Entities;
     public class Persona : BaseEntity
     {
@@ -18,5 +20,8 @@ namespace Dominio.Entities;
         public ICollection<RecetaMedica> PacienteCollection {get; set;}
         public ICollection<MovimientoInventario> ResponsableCollection {get; set;}
         public ICollection<MovimientoInventario> ReceptorCollection {get; set;}
+        public ICollection<ContactoPersona> ContactoPersonas {get; set;}
+        public ICollection<Producto> Productos {get; set;} = new HashSet<Producto>();
+        public ICollection<ProductoProveedor> ProductoProveedores {get; set;}
 
     }

@@ -9,5 +9,6 @@ namespace Dominio.Entities
     public class Presentacion : BaseEntity
     {
         public string Descripcion {get; set;}
+        public ICollection<Inventario> Inventarios {get; set;}
     }
 }

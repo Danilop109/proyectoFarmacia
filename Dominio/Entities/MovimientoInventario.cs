@@ -15,12 +15,14 @@ namespace Dominio.Entities
         public Persona ReceptorFk {get; set;}
         public int IdTipoMovInventarioFk {get; set;}
         public TipoMovInventario TipoMovInventario {get; set;}
-        public int IdFormaPago {get; set;}
+        public int IdFormaPagoFk {get; set;}
         public FormaPago FormaPago {get; set;}
         public int IdRecetaMedicaFk {get; set;}
         public RecetaMedica RecetaMedica {get; set;}
         public ICollection<DetalleMovInventario> DetalleMovInventarios {get; set;}
         public ICollection<Factura> Facturas {get; set;}
+        public ICollection<Producto> Productos {get; set;} = new HashSet<Producto>();
+
 
 
     }
