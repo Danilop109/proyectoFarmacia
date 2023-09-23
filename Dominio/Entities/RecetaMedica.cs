@@ -11,4 +11,5 @@ namespace Dominio.Entities;
         public Persona PacienteFk {get;set;}
         public string Detalle {get; set;}
         public ICollection<MedicamentoRecetado> MedicamentoRecetados {get; set;}
+        public ICollection<Inventario> Inventarios {get; set;} = new HashSet<Inventario>();
     }

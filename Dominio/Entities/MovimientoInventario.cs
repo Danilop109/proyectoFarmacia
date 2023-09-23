@@ -21,6 +21,8 @@ namespace Dominio.Entities
         public RecetaMedica RecetaMedica {get; set;}
         public ICollection<DetalleMovInventario> DetalleMovInventarios {get; set;}
         public ICollection<Factura> Facturas {get; set;}
+        public ICollection<Producto> Productos {get; set;} = new HashSet<Producto>();
+
 
 
     }
