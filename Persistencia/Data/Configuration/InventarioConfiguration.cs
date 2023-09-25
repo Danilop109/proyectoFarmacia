@@ -35,7 +35,7 @@ namespace Persistencia.Data.Configuration
 
             builder.Property(p => p.FechaExpiracion)
             .HasColumnName("fechaExpiracion")
-            .HasColumnType("DateOnly")
+            .HasColumnType("DateTime")
             .IsRequired();
 
             builder.HasOne(p => p.Presentacion)

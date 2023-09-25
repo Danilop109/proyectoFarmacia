@@ -8,7 +8,7 @@ namespace Dominio.Entities;
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public string Documento {get; set;}
-        public DateOnly FechaRegistro {get; set;}
+        public DateTime FechaRegistro {get; set;}
         public int IdTipoPersonaFk {get; set;}
         public TipoPersona TipoPersona {get; set;}
         public int IdTipoDocumentoFk {get; set;}

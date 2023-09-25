@@ -15,7 +15,6 @@ namespace Persistencia;
         public DbSet<Departamento> Departamentos {get; set;}
         public DbSet<DetalleMovInventario> DetalleMovInventarios {get; set;}
         public DbSet<Direccion> Direcciones {get; set;}
-        public DbSet<Factura> Facturas {get; set;}
         public DbSet<FormaPago> FormasPagos {get; set;}
         public DbSet<Inventario> Inventarios {get; set;}
         public DbSet<Marca> Marcas {get; set;}
