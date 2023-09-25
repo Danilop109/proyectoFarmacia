@@ -34,7 +34,7 @@ namespace Persistencia.Data.Configuration
 
             builder.Property(n => n.FechaRegistro)
             .HasColumnName("FechaRegistro")
-            .HasColumnType("DateOnly")
+            .HasColumnType("DateTime")
             .IsRequired();
 
             builder.HasOne(t => t.TipoPersona)
@@ -60,7 +60,7 @@ namespace Persistencia.Data.Configuration
                 .HasForeignKey(p=> p.IdProductoFk),
 
                 j => j
-                .HasOne(p => p.Persona)
+                .HasOne(p => p.Proveedor)
                 .WithMany(p => p.ProductoProveedores)
                 .HasForeignKey(p=> p.IdProveedorFk),
 

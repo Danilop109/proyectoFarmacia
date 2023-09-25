@@ -13,13 +13,13 @@ namespace Persistencia.Data.Configuration
 
             builder.Property(p => p.FechaMovimiento)
             .HasColumnName("fechaMovimiento")
-            .HasColumnType("DateOnly")
+            .HasColumnType("DateTime")
             .IsRequired();
             
 
             builder.Property(p => p.FechaVencimiento)
             .HasColumnName("fechaVencimiento")
-            .HasColumnType("DateOnly")
+            .HasColumnType("DateTime")
             .IsRequired();
 
             builder.HasOne(p => p.FormaPago)
@@ -37,8 +37,6 @@ namespace Persistencia.Data.Configuration
             builder.HasOne(mi => mi.ReceptorFk)
             .WithMany(p => p.ReceptorCollection)
             .HasForeignKey(mi => mi.IdReceptorFk);
-
-
 
         }
 

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Persistencia.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreateMig : Migration
+    public partial class InicialCreateMig : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -183,7 +183,7 @@ namespace Persistencia.Data.Migrations
                     stock = table.Column<int>(type: "int", nullable: false),
                     stockMin = table.Column<int>(type: "int", nullable: false),
                     stockMax = table.Column<int>(type: "int", nullable: false),
-                    fechaExpiracion = table.Column<DateOnly>(type: "DateOnly", nullable: false),
+                    fechaExpiracion = table.Column<DateTime>(type: "DateTime", nullable: false),
                     IdPresentacionFk = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -210,7 +210,7 @@ namespace Persistencia.Data.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Documento = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    FechaRegistro = table.Column<DateOnly>(type: "DateOnly", nullable: false),
+                    FechaRegistro = table.Column<DateTime>(type: "DateTime", nullable: false),
                     IdTipoPersonaFk = table.Column<int>(type: "int", nullable: false),
                     IdTipoDocumentoFk = table.Column<int>(type: "int", nullable: false),
                     IdRolFk = table.Column<int>(type: "int", nullable: false)
@@ -298,8 +298,8 @@ namespace Persistencia.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    FechaEmicion = table.Column<DateOnly>(type: "DateOnly", nullable: false),
-                    FechaCaducidad = table.Column<DateOnly>(type: "DateOnly", nullable: false),
+                    FechaEmicion = table.Column<DateTime>(type: "DateTime", nullable: false),
+                    FechaCaducidad = table.Column<DateTime>(type: "DateTime", nullable: false),
                     detalle = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IdDoctorFk = table.Column<int>(type: "int", nullable: false),
@@ -419,8 +419,8 @@ namespace Persistencia.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    fechaVencimiento = table.Column<DateOnly>(type: "DateOnly", nullable: false),
-                    fechaMovimiento = table.Column<DateOnly>(type: "DateOnly", nullable: false),
+                    fechaVencimiento = table.Column<DateTime>(type: "DateTime", nullable: false),
+                    fechaMovimiento = table.Column<DateTime>(type: "DateTime", nullable: false),
                     IdResponsableFk = table.Column<int>(type: "int", nullable: false),
                     IdReceptorFk = table.Column<int>(type: "int", nullable: false),
                     IdTipoMovInventarioFk = table.Column<int>(type: "int", nullable: false),
@@ -552,7 +552,6 @@ namespace Persistencia.Data.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Precio = table.Column<double>(type: "double", nullable: false),
                     Cantidad = table.Column<int>(type: "int", maxLength: 3, nullable: false),
-                    TieneReceta = table.Column<bool>(type: "bool(1)", nullable: false),
                     IdMarcaFk = table.Column<int>(type: "int", nullable: false),
                     IdInventarioFk = table.Column<int>(type: "int", nullable: false),
                     MovimientoInventarioId = table.Column<int>(type: "int", nullable: true)
@@ -577,33 +576,6 @@ namespace Persistencia.Data.Migrations
                         column: x => x.MovimientoInventarioId,
                         principalTable: "movimientoInventario",
                         principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "factura",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    IdMovInventarioFk = table.Column<int>(type: "int", nullable: false),
-                    IdProductoFk = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_factura", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_factura_Producto_IdProductoFk",
-                        column: x => x.IdProductoFk,
-                        principalTable: "Producto",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_factura_movimientoInventario_IdMovInventarioFk",
-                        column: x => x.IdMovInventarioFk,
-                        principalTable: "movimientoInventario",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -672,16 +644,6 @@ namespace Persistencia.Data.Migrations
                 name: "IX_direccion_IdPersonaFk",
                 table: "direccion",
                 column: "IdPersonaFk");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_factura_IdMovInventarioFk",
-                table: "factura",
-                column: "IdMovInventarioFk");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_factura_IdProductoFk",
-                table: "factura",
-                column: "IdProductoFk");
 
             migrationBuilder.CreateIndex(
                 name: "IX_inventario_IdPresentacionFk",
@@ -802,9 +764,6 @@ namespace Persistencia.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "direccion");
-
-            migrationBuilder.DropTable(
-                name: "factura");
 
             migrationBuilder.DropTable(
                 name: "medicamentoRecetado");
