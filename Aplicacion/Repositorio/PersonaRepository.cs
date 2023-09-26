@@ -4,13 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dominio.Entities;
 using Dominio.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Persistencia;
 
 namespace Aplicacion.Repositorio
 {
-    public class CiudadRepository : GenericRepository<Ciudad>, ICiudad
+    public class PersonaRepository : GenericRepository<Persona>, IPersona
     {
-        public CiudadRepository(ApiFarmaciaContext context) : base(context)
+        public PersonaRepository(ApiFarmaciaContext context) : base(context)
         {
         }
     }

@@ -8,9 +8,9 @@ using Persistencia;
 
 namespace Aplicacion.Repositorio
 {
-    public class CiudadRepository : GenericRepository<Ciudad>, ICiudad
+    public class TipoPersonaRepository : GenericRepository<TipoPersona>, ITipoPersona
     {
-        public CiudadRepository(ApiFarmaciaContext context) : base(context)
+        public TipoPersonaRepository(ApiFarmaciaContext context) : base(context)
         {
         }
     }
