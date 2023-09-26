@@ -661,7 +661,7 @@ namespace Persistencia.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Dominio.Entities.TipoContacto", "TipoContacto")
-                        .WithMany("ContactosPersonas")
+                        .WithMany("ContactoPersonas")
                         .HasForeignKey("IdTipoContactoFk")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1014,7 +1014,7 @@ namespace Persistencia.Data.Migrations
 
             modelBuilder.Entity("Dominio.Entities.TipoContacto", b =>
                 {
-                    b.Navigation("ContactosPersonas");
+                    b.Navigation("ContactoPersonas");
                 });
 
             modelBuilder.Entity("Dominio.Entities.TipoDocumento", b =>
