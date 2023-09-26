@@ -1,18 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Dominio.Interfaces
-{
+namespace Dominio.Interfaces;
     public interface IUnitOfWork 
     {
         ICiudad Ciudades {get;}
-        IContactoPersona ContactosPersonas {get;}
+        IContactoPersona ContactoPersonas {get;}
         IDepartamento Departamentos {get;}
         IDetalleMovInventario DetalleMovInventarios {get;}
         IDireccion Direcciones {get;}
-        IFormaPago FormasPagos {get;}
+        IFormaPago FormaPagos {get;}
         IInventario Inventarios {get;}
         IMarca Marcas {get;}
         IMedicamentoRecetado MedicamentoRecetados {get;}
@@ -29,7 +24,5 @@ namespace Dominio.Interfaces
         ITipoMovInventario TipoMovInventarios {get;}
         ITipoPersona TipoPersonas {get;}
         IUser Users {get;}
-
         Task<int> SaveAsync();
     }
-}
