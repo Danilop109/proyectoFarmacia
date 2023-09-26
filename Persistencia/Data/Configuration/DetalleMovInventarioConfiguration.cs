@@ -14,14 +14,13 @@ namespace Persistencia.Data.Configuration
             .HasColumnName("cantidad")
             .HasColumnType("int")
             .IsRequired()
-            .HasMaxLength(100);
+            .HasMaxLength(3);
 
 
             builder.Property(p => p.Precio)
             .HasColumnName("precio")
-            .HasColumnType("decimal")
-            .IsRequired()
-            .HasMaxLength(10000);
+            .HasColumnType("double")
+            .IsRequired();
 
             builder.HasOne(p => p.Invintario)
             .WithMany(p => p.DetalleMovInventarios)

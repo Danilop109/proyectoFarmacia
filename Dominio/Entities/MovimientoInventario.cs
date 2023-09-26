@@ -20,7 +20,6 @@ namespace Dominio.Entities
         public int IdRecetaMedicaFk {get; set;}
         public RecetaMedica RecetaMedica {get; set;}
         public ICollection<DetalleMovInventario> DetalleMovInventarios {get; set;}
-        public ICollection<Factura> Facturas {get; set;}
         public ICollection<Producto> Productos {get; set;} = new HashSet<Producto>();   
 
 

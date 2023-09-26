@@ -14,15 +14,13 @@ namespace Persistencia.Data.Configuration
             builder.Property(p => p.FechaMovimiento)
             .HasColumnName("fechaMovimiento")
             .HasColumnType("DateTime")
-            .IsRequired()
-            .HasMaxLength(100);
+            .IsRequired();
             
 
             builder.Property(p => p.FechaVencimiento)
             .HasColumnName("fechaVencimiento")
             .HasColumnType("DateTime")
-            .IsRequired()
-            .HasMaxLength(100);
+            .IsRequired();
 
             builder.HasOne(p => p.FormaPago)
             .WithMany(p => p.MovimientoInventarios)
@@ -33,14 +31,12 @@ namespace Persistencia.Data.Configuration
             .HasForeignKey(p => p.IdTipoMovInventarioFk);
 
             builder.HasOne(mi => mi.ResponsableFk)
-            .WithMany(p => p.MovimientoInventariosResponsable)
+            .WithMany(p => p.ResponsableCollection)
             .HasForeignKey(mi => mi.IdResponsableFk);
 
             builder.HasOne(mi => mi.ReceptorFk)
-            .WithMany(p => p.MovimientoInventariosReceptor)
+            .WithMany(p => p.ReceptorCollection)
             .HasForeignKey(mi => mi.IdReceptorFk);
-
-
 
         }
 

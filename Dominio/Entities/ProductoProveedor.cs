@@ -7,9 +7,9 @@ namespace Dominio.Entities
 {
     public class ProductoProveedor : BaseEntity
     {
-        public string IdProveedorFk {get; set;}
-        public Persona Persona {get; set;}
-        public string IdProductoFk {get; set;}
+        public int IdProveedorFk {get; set;}
+        public Persona Proveedor {get; set;}
+        public int IdProductoFk {get; set;}
         public Producto Producto {get; set;}
     }
 }

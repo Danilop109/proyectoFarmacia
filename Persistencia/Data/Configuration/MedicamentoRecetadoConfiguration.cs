@@ -12,9 +12,9 @@ namespace Persistencia.Data.Configuration
 
             builder.Property(p => p.Descripcion)
             .HasColumnName("descripcion")
-            .HasColumnType("string")
+            .HasColumnType("varchar")
             .IsRequired()
-            .HasMaxLength(300);
+            .HasMaxLength(200);
 
             builder.HasOne(p => p.RecetaMedica)
             .WithMany(p => p.MedicamentoRecetados)
