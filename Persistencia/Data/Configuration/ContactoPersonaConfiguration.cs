@@ -27,7 +27,7 @@ namespace Persistencia.Data.Configuration
             .HasForeignKey( p => p.IdPersonaFk);
 
             builder.HasOne(p => p.TipoContacto)
-            .WithMany(p => p.ContactosPersonas)
+            .WithMany(p => p.ContactoPersonas)
             .HasForeignKey(p => p.IdTipoContactoFk);
         }
     }
