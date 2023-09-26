@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ApiFarmacia.Extensions
-{
-    public class ApplicationServiceExtension
+namespace ApiFarmacia.Extensions;
+    public static class ApplicationServiceExtension
     {
         public static void ConfigureCors(this IServiceCollection services) =>
         services.AddCors(options => 
@@ -16,4 +15,3 @@ namespace ApiFarmacia.Extensions
             .AllowAnyHeader());           //WithHeaders (*accept*, "content-type")
         });
     }
-}
