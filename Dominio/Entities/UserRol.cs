@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Dominio.Entities;
-    public class UserRol
+    public class UserRol 
     {
         public int IdRolFk {get; set;}
         public Rol Rol {get; set;}
