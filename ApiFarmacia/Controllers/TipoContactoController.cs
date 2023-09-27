@@ -72,7 +72,7 @@ namespace ApiFarmacia.Controllers;
                 [ProducesResponseType(StatusCodes.Status404NotFound)]
                 [ProducesResponseType(StatusCodes.Status400BadRequest)]
         
-                public async Task<ActionResult> Delete(int id)
+                public async Task<IActionResult> Delete(int id)
                 { 
                     var llamado = await unitOfWork.TipoContactos.GetByIdAsync(id);
                     if (llamado == null){
