@@ -11,7 +11,7 @@ using Persistencia;
 namespace Persistencia.Data.Migrations
 {
     [DbContext(typeof(ApiFarmaciaContext))]
-    [Migration("20230925223236_InicialCreateMig")]
+    [Migration("20230926221421_InicialCreateMig")]
     partial class InicialCreateMig
     {
         /// <inheritdoc />
@@ -664,7 +664,7 @@ namespace Persistencia.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Dominio.Entities.TipoContacto", "TipoContacto")
-                        .WithMany("ContactosPersonas")
+                        .WithMany("ContactoPersonas")
                         .HasForeignKey("IdTipoContactoFk")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1017,7 +1017,7 @@ namespace Persistencia.Data.Migrations
 
             modelBuilder.Entity("Dominio.Entities.TipoContacto", b =>
                 {
-                    b.Navigation("ContactosPersonas");
+                    b.Navigation("ContactoPersonas");
                 });
 
             modelBuilder.Entity("Dominio.Entities.TipoDocumento", b =>
