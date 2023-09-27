@@ -13,5 +13,6 @@ namespace Aplicacion.Repositorio
         public ProductoRepository(ApiFarmaciaContext context) : base(context)
         {
         }
+
     }
 }

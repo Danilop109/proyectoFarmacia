@@ -39,8 +39,8 @@ namespace ApiFarmacia.Controllers;
             return Ok(formaPago);
         }
 
-        [HttpPost("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
         public async Task<ActionResult<FormaPago>> Post(FormaPago formaPago)
@@ -70,7 +70,7 @@ namespace ApiFarmacia.Controllers;
             return formaPago;
         }
 
-        [HttpPut("{id}")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
 

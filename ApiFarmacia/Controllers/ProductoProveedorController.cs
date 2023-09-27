@@ -73,13 +73,13 @@ namespace ApiFarmacia.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         { 
             var llamado = await unitOfWork.ProductoProveedores.GetByIdAsync(id);
             if (llamado == null){
                 return NotFound();
             }
-            unitOfWork.Productos.Remove(llamado);
+            unitOfWork.ProductoProveedores.Remove(llamado);
             await unitOfWork.SaveAsync();
             return NoContent();
         }
