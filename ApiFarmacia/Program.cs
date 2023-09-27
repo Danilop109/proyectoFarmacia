@@ -12,7 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigureCors();
-builder.Services.AddAplicacionServices();
+builder.Services.AddAplicationServices();
 
 builder.Services.AddDbContext<ApiFarmaciaContext>(options =>
 {

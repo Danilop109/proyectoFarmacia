@@ -40,8 +40,8 @@ namespace ApiFarmacia.Controllers;
             return Ok(movimientoInventario);
         }
 
-        [HttpPost("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
         public async Task<ActionResult<MovimientoInventario>> Post(MovimientoInventario movimientoInventario)
@@ -71,7 +71,7 @@ namespace ApiFarmacia.Controllers;
             return movimientoInventario;
         }
 
-        [HttpPut("{id}")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
 

@@ -79,7 +79,7 @@ namespace ApiFarmacia.Controllers
             if (llamado == null){
                 return NotFound();
             }
-            unitOfWork.Productos.Remove(llamado);
+            unitOfWork.ProductoProveedores.Remove(llamado);
             await unitOfWork.SaveAsync();
             return NoContent();
         }
