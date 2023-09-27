@@ -17,7 +17,7 @@ namespace ApiFarmacia.Extensions;
             .AllowAnyHeader());           //WithHeaders (*accept*, "content-type")
         });
 
-        public static void AddAplicacionServices(this IServiceCollection services)
+        public static void AddAplicationServices(this IServiceCollection services)
             {
                 // services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
                 // services.AddScoped<IUserService, UserService>(); 
