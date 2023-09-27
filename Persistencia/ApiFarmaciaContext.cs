@@ -11,12 +11,11 @@ namespace Persistencia;
         }
 
         public DbSet<Ciudad> Ciudades { get; set; }
-        public DbSet<ContactoPersona> ContactosPersonas { get; set; }
+        public DbSet<ContactoPersona> ContactoPersonas { get; set; }
         public DbSet<Departamento> Departamentos {get; set;}
         public DbSet<DetalleMovInventario> DetalleMovInventarios {get; set;}
         public DbSet<Direccion> Direcciones {get; set;}
-        public DbSet<Factura> Facturas {get; set;}
-        public DbSet<FormaPago> FormasPagos {get; set;}
+        public DbSet<FormaPago> FormaPagos {get; set;}
         public DbSet<Inventario> Inventarios {get; set;}
         public DbSet<Marca> Marcas {get; set;}
         public DbSet<MedicamentoRecetado> MedicamentoRecetados {get; set;}

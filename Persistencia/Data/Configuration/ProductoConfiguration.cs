@@ -31,11 +31,6 @@ namespace Persistencia.Data.Configuration
             .IsRequired()
             .HasMaxLength(3);
 
-            builder.Property(n => n.Tienereceta)
-            .HasColumnName("TieneReceta")
-            .HasColumnType("bool")
-            .IsRequired();
-
             builder.HasOne(m => m.Marca)
             .WithMany(m => m.Productos)
             .HasForeignKey(m=> m.IdMarcaFk);

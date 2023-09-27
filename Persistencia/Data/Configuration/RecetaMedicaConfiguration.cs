@@ -16,12 +16,12 @@ namespace Persistencia.Data.Configuration
 
             builder.Property(p => p.FechaEmicion)
             .HasColumnName("FechaEmicion")
-            .HasColumnType("DateOnly")
+            .HasColumnType("DateTime")
             .IsRequired();
 
             builder.Property(p => p.FechaCaducidad)
             .HasColumnName("FechaCaducidad")
-            .HasColumnType("DateOnly")
+            .HasColumnType("DateTime")
             .IsRequired();
 
             builder.Property(p => p.Detalle)

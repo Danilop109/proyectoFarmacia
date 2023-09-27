@@ -153,27 +153,6 @@ namespace Persistencia.Data.Migrations
                     b.ToTable("direccion", (string)null);
                 });
 
-            modelBuilder.Entity("Dominio.Entities.Factura", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdMovInventarioFk")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdProductoFk")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdMovInventarioFk");
-
-                    b.HasIndex("IdProductoFk");
-
-                    b.ToTable("factura", (string)null);
-                });
-
             modelBuilder.Entity("Dominio.Entities.FormaPago", b =>
                 {
                     b.Property<int>("Id")
@@ -197,8 +176,8 @@ namespace Persistencia.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateOnly>("FechaExpiracion")
-                        .HasColumnType("DateOnly")
+                    b.Property<DateTime>("FechaExpiracion")
+                        .HasColumnType("DateTime")
                         .HasColumnName("fechaExpiracion");
 
                     b.Property<int>("IdPresentacionFk")
@@ -279,12 +258,12 @@ namespace Persistencia.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateOnly>("FechaMovimiento")
-                        .HasColumnType("DateOnly")
+                    b.Property<DateTime>("FechaMovimiento")
+                        .HasColumnType("DateTime")
                         .HasColumnName("fechaMovimiento");
 
-                    b.Property<DateOnly>("FechaVencimiento")
-                        .HasColumnType("DateOnly")
+                    b.Property<DateTime>("FechaVencimiento")
+                        .HasColumnType("DateTime")
                         .HasColumnName("fechaVencimiento");
 
                     b.Property<int>("IdFormaPagoFk")
@@ -353,8 +332,8 @@ namespace Persistencia.Data.Migrations
                         .HasColumnType("varchar")
                         .HasColumnName("Documento");
 
-                    b.Property<DateOnly>("FechaRegistro")
-                        .HasColumnType("DateOnly")
+                    b.Property<DateTime>("FechaRegistro")
+                        .HasColumnType("DateTime")
                         .HasColumnName("FechaRegistro");
 
                     b.Property<int>("IdRolFk")
@@ -430,10 +409,6 @@ namespace Persistencia.Data.Migrations
                         .HasColumnType("double")
                         .HasColumnName("Precio");
 
-                    b.Property<bool>("Tienereceta")
-                        .HasColumnType("bool")
-                        .HasColumnName("TieneReceta");
-
                     b.HasKey("Id");
 
                     b.HasIndex("IdInventarioFk");
@@ -475,12 +450,12 @@ namespace Persistencia.Data.Migrations
                         .HasColumnType("varchar")
                         .HasColumnName("detalle");
 
-                    b.Property<DateOnly>("FechaCaducidad")
-                        .HasColumnType("DateOnly")
+                    b.Property<DateTime>("FechaCaducidad")
+                        .HasColumnType("DateTime")
                         .HasColumnName("FechaCaducidad");
 
-                    b.Property<DateOnly>("FechaEmicion")
-                        .HasColumnType("DateOnly")
+                    b.Property<DateTime>("FechaEmicion")
+                        .HasColumnType("DateTime")
                         .HasColumnName("FechaEmicion");
 
                     b.Property<int>("IdDoctorFk")
@@ -686,7 +661,7 @@ namespace Persistencia.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Dominio.Entities.TipoContacto", "TipoContacto")
-                        .WithMany("ContactosPersonas")
+                        .WithMany("ContactoPersonas")
                         .HasForeignKey("IdTipoContactoFk")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -743,25 +718,6 @@ namespace Persistencia.Data.Migrations
                     b.Navigation("Ciudad");
 
                     b.Navigation("Persona");
-                });
-
-            modelBuilder.Entity("Dominio.Entities.Factura", b =>
-                {
-                    b.HasOne("Dominio.Entities.MovimientoInventario", "MovimientoInventario")
-                        .WithMany("Facturas")
-                        .HasForeignKey("IdMovInventarioFk")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Dominio.Entities.Producto", "Producto")
-                        .WithMany("Facturas")
-                        .HasForeignKey("IdProductoFk")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MovimientoInventario");
-
-                    b.Navigation("Producto");
                 });
 
             modelBuilder.Entity("Dominio.Entities.Inventario", b =>
@@ -895,15 +851,15 @@ namespace Persistencia.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Dominio.Entities.Persona", "Persona")
+                    b.HasOne("Dominio.Entities.Persona", "Proveedor")
                         .WithMany("ProductoProveedores")
                         .HasForeignKey("IdProveedorFk")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Persona");
-
                     b.Navigation("Producto");
+
+                    b.Navigation("Proveedor");
                 });
 
             modelBuilder.Entity("Dominio.Entities.RecetaMedica", b =>
@@ -1005,8 +961,6 @@ namespace Persistencia.Data.Migrations
                 {
                     b.Navigation("DetalleMovInventarios");
 
-                    b.Navigation("Facturas");
-
                     b.Navigation("Productos");
                 });
 
@@ -1041,8 +995,6 @@ namespace Persistencia.Data.Migrations
 
             modelBuilder.Entity("Dominio.Entities.Producto", b =>
                 {
-                    b.Navigation("Facturas");
-
                     b.Navigation("ProductoProveedores");
                 });
 
@@ -1062,7 +1014,7 @@ namespace Persistencia.Data.Migrations
 
             modelBuilder.Entity("Dominio.Entities.TipoContacto", b =>
                 {
-                    b.Navigation("ContactosPersonas");
+                    b.Navigation("ContactoPersonas");
                 });
 
             modelBuilder.Entity("Dominio.Entities.TipoDocumento", b =>
