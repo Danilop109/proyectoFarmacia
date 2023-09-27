@@ -8,6 +8,6 @@ namespace Dominio.Entities
     public class TipoContacto : BaseEntity
     {
         public string Nombre {get; set;}
-        public ICollection<ContactoPersona> ContactosPersonas {get; set;}
+        public ICollection<ContactoPersona> ContactoPersonas {get; set;}
     }
 }
