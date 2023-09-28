@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiFarmacia.Dtos;
+using AutoMapper;
 using Dominio.Entities;
 using Dominio.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -13,77 +15,88 @@ namespace ApiFarmacia.Controllers;
     public class MovimientoInventarioController : BaseApiController
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public MovimientoInventarioController(IUnitOfWork unitOfWork)
+        public MovimientoInventarioController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this._unitOfWork = unitOfWork;
+            this._mapper = mapper;
         }
 
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+            [HttpGet]
+            [ProducesResponseType(StatusCodes.Status200OK)]
+            [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<IEnumerable<MovimientoInventario>>> Get()
-        {
-            var movimientoInventario = await _unitOfWork.MovimientoInventarios.GetAllAsync();
-            return Ok(movimientoInventario);
-        }
+            public async Task<ActionResult<IEnumerable<MovimientoInventarioDto>>> Get()
+            {
+                var movimientoInventario = await _unitOfWork.MovimientoInventarios.GetAllAsync();
+                return _mapper.Map<List<MovimientoInventarioDto>>(movimientoInventario);
+            }
 
                 
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+            [HttpGet("{id}")]
+            [ProducesResponseType(StatusCodes.Status200OK)]
+            [ProducesResponseType(StatusCodes.Status400BadRequest)]
+            [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        public async Task<IActionResult> Get (int id)
-        {
-            var movimientoInventario = await _unitOfWork.MovimientoInventarios.GetByIdAsync(id);
-            return Ok(movimientoInventario);
-        }
+            public async Task<ActionResult<MovimientoInventario>> Get (int id)
+            {
+                var movimientoInventario = await _unitOfWork.MovimientoInventarios.GetByIdAsync(id);
+                if(movimientoInventario == null)
+                {
+                    return NotFound();
+                }
+                return this._mapper.Map<MovimientoInventario>(movimientoInventario);
+            }
 
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+            [HttpPost]
+            [ProducesResponseType(StatusCodes.Status201Created)]
+            [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<MovimientoInventario>> Post(MovimientoInventario movimientoInventario)
-        {
-            this._unitOfWork.MovimientoInventarios.Add(movimientoInventario);
-            await _unitOfWork.SaveAsync();
+            public async Task<ActionResult<MovimientoInventario>> Post(MovimientoInventarioDto movimientoInventarioDto)
+            {
+                var movimientoInventario = this._mapper.Map<MovimientoInventario>(movimientoInventarioDto);
+                this._unitOfWork.MovimientoInventarios.Add(movimientoInventario);
+                await _unitOfWork.SaveAsync();
+                if(movimientoInventario == null)
+                {
+                    return BadRequest();
+                }
+                movimientoInventarioDto.Id = movimientoInventario.Id;
+                return CreatedAtAction(nameof(Post), new {id = movimientoInventarioDto.Id}, movimientoInventarioDto);
+                }
 
-        if(movimientoInventario == null)
-        {
-            return BadRequest();
-        }
-        return CreatedAtAction(nameof(Post), new {id = movimientoInventario.Id}, movimientoInventario);
-        }
 
+            [HttpPut("{id}")]
+            [ProducesResponseType(StatusCodes.Status200OK)]
+            [ProducesResponseType(StatusCodes.Status404NotFound)]
+            [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-
-        public async Task<ActionResult<MovimientoInventario>> Put(int id, [FromBody] MovimientoInventario movimientoInventario)
-        {
-        if(movimientoInventario == null)
-            return NotFound();
-            _unitOfWork.MovimientoInventarios.Update(movimientoInventario);
-            await _unitOfWork.SaveAsync();
-            return movimientoInventario;
-        }
-
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-
-        public async Task<IActionResult> Delete(int id)
-        {
-            var movimientoInventario = await _unitOfWork.MovimientoInventarios.GetByIdAsync(id);
-            if(movimientoInventario == null)
+            public async Task<ActionResult<MovimientoInventarioDto>> Put(int id, [FromBody] MovimientoInventarioDto movimientoInventarioDto)
+            {
+            if(movimientoInventarioDto == null)
             {
                 return NotFound();
             }
-            _unitOfWork.MovimientoInventarios.Remove(movimientoInventario);
-            await _unitOfWork.SaveAsync();
-            return NoContent();
-    }
+                var movimientoInventario = this._mapper.Map<MovimientoInventario>(movimientoInventarioDto);
+                _unitOfWork.MovimientoInventarios.Update(movimientoInventario);
+                await _unitOfWork.SaveAsync();
+                return movimientoInventarioDto;
+            }
+
+            [HttpDelete("{id}")]
+            [ProducesResponseType(StatusCodes.Status204NoContent)]
+            [ProducesResponseType(StatusCodes.Status404NotFound)]
+
+            public async Task<IActionResult> Delete(int id)
+            {
+                var movimientoInventario = await _unitOfWork.MovimientoInventarios.GetByIdAsync(id);
+                if(movimientoInventario == null)
+                {
+                    return NotFound();
+                }
+                _unitOfWork.MovimientoInventarios.Remove(movimientoInventario);
+                await _unitOfWork.SaveAsync();
+                return NoContent();
+        }
 }
