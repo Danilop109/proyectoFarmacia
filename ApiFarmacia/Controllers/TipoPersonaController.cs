@@ -38,12 +38,12 @@ public class TipoPersonaController : BaseApiController
 
     public async Task<ActionResult<TipoPersonaDto>> Get(int id)
     {
-        var llamado = await unitOfWork.TipoPersonas.GetByIdAsync(id);
-        if(llamado = null)
+        var tipoPersona = await unitOfWork.TipoPersonas.GetByIdAsync(id);
+        if(tipoPersona == null)
         {
             return NotFound();
         }
-        return _mapper.Map<TipoPersonaDto>(llamado);
+        return _mapper.Map<TipoPersonaDto>(tipoPersona);
     }
 
     [HttpPost]
@@ -52,15 +52,15 @@ public class TipoPersonaController : BaseApiController
 
     public async Task<ActionResult<TipoPersona>> Post(TipoPersonaDto tipoPersonaDto)
     {
-        var llamado = _mapper.Map<TipoPersona>(tipoPersonaDto);
-        this.unitOfWork.TipoPersonas.Add(llamado);
+        var tipoPersona = _mapper.Map<TipoPersona>(tipoPersonaDto);
+        this.unitOfWork.TipoPersonas.Add(tipoPersona);
         await unitOfWork.SaveAsync();
-        if (llamado == null)
+        if (tipoPersona == null)
         {
             return BadRequest();
         }
-        llamadoDto.Id = llamado.Id;
-        return CreatedAtAction(nameof(Post), new { id = llamadoDto.Id }, llamadoDto);
+        tipoPersonaDto.Id = tipoPersona.Id;
+        return CreatedAtAction(nameof(Post), new { id = tipoPersonaDto.Id }, tipoPersonaDto);
     }
 
     [HttpPut("{id}")]
@@ -74,7 +74,7 @@ public class TipoPersonaController : BaseApiController
         {
             return NotFound();
         }
-        var tipoPersona = this._mapper.Map<TipoPersona>(TipoContactoDto);
+        var tipoPersona = this._mapper.Map<TipoPersona>(tipoPersonaDto);
         unitOfWork.TipoPersonas.Update(tipoPersona);
         await unitOfWork.SaveAsync();
         return tipoPersonaDto;
