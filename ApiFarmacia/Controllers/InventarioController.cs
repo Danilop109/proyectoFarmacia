@@ -42,6 +42,9 @@ namespace ApiFarmacia.Controllers;
         [HttpGet("MenosUnidades/{cantidad}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
 
+
+        //Obetener todos los medicamentos con menos de (x) unidades en stock
+
         public async Task<ActionResult<IEnumerable<InventarioDto>>> MenosUnidades(int cantidad)
         {
             var inventarios = await _unitOfWork.Inventarios.ObtenerMenosStockAsync(cantidad);
