@@ -26,8 +26,6 @@ public class InventarioController : BaseApiController
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-
-
     public async Task<ActionResult<IEnumerable<InventarioDto>>> Get()
     {
         var inventario = await _unitOfWork.Inventarios.GetAllAsync();
@@ -83,7 +81,11 @@ public class InventarioController : BaseApiController
         inventarioDto.Id = inventario.Id;
         return CreatedAtAction(nameof(Post), new { id = inventarioDto.Id }, inventarioDto);
     }
-
+    public async Task<ActionResult<IEnumerable<InventarioDto>>> Get5()
+    {
+        var inventario = await _unitOfWork.Inventarios.GetAllAsync();
+        return _mapper.Map<List<InventarioDto>>(inventario);
+    }
 
 
     [HttpPut("{id}")]
