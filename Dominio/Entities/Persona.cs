@@ -24,4 +24,5 @@ namespace Dominio.Entities;
         public ICollection<Producto> Productos {get; set;} = new HashSet<Producto>();
         public ICollection<ProductoProveedor> ProductoProveedores {get; set;}
         public virtual User User {get; set;}
+  
 }
