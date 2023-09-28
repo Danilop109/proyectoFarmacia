@@ -27,80 +27,18 @@ public class InventarioController : BaseApiController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-<<<<<<< HEAD
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<IEnumerable<InventarioDto>>> Get()
-        {
-            var inventario = await _unitOfWork.Inventarios.GetAllAsync();
-            return _mapper.Map<List<InventarioDto>>(inventario);
-        }
-
-                
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<InventarioDto>> Get (int id)
-        {
-            var inventario = await _unitOfWork.Inventarios.GetByIdAsync(id);
-            if(inventario == null)
-            {
-                return NotFound();
-            }
-            return this._mapper.Map<InventarioDto>(inventario);
-        }
-
-
-        //Obetener todos los medicamentos con menos de (x) unidades en stock
-
-        [HttpGet("MenosUnidades/{cantidad}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-
-        public async Task<ActionResult<IEnumerable<InventarioDto>>> MenosUnidades(int cantidad)
-        {
-            var inventarios = await _unitOfWork.Inventarios.ObtenerMenosStockAsync(cantidad);
-            if(inventarios == null)
-            {
-                return NotFound("No se encontraron productos menores a " + cantidad);
-            }
-            return _mapper.Map<List<InventarioDto>>(inventarios);
-        }
-
-
-
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-
-        public async Task<ActionResult<Inventario>> Post(InventarioDto inventarioDto)
-        {
-            var inventario = this._mapper.Map<Inventario>(inventarioDto);
-            this._unitOfWork.Inventarios.Add(inventario);
-            await _unitOfWork.SaveAsync();
-            if(inventario == null)
-            {
-                return BadRequest();
-            }
-            inventarioDto.Id = inventario.Id;
-            return CreatedAtAction(nameof(Post), new {id = inventarioDto.Id}, inventarioDto);
-            }
-=======
     public async Task<ActionResult<IEnumerable<InventarioDto>>> Get()
     {
         var inventario = await _unitOfWork.Inventarios.GetAllAsync();
         return _mapper.Map<List<InventarioDto>>(inventario);
     }
->>>>>>> 46e832bbe19abf8d4cca820fa2e49ef9415af837
 
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-
     public async Task<ActionResult<InventarioDto>> Get(int id)
     {
         var inventario = await _unitOfWork.Inventarios.GetByIdAsync(id);
@@ -110,6 +48,9 @@ public class InventarioController : BaseApiController
         }
         return this._mapper.Map<InventarioDto>(inventario);
     }
+
+
+    //Obetener todos los medicamentos con menos de (x) unidades en stock
 
     [HttpGet("MenosUnidades/{cantidad}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -142,6 +83,7 @@ public class InventarioController : BaseApiController
         inventarioDto.Id = inventario.Id;
         return CreatedAtAction(nameof(Post), new { id = inventarioDto.Id }, inventarioDto);
     }
+
 
 
     [HttpPut("{id}")]
