@@ -34,5 +34,6 @@ namespace Aplicacion.Repositorio
             .Include(p => p.RecetaMedica)
             .FirstOrDefaultAsync(p => p.Id == id);
         }
+
     }
 }
