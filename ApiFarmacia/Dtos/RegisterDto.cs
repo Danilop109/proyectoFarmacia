@@ -1,16 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ApiFarmacia.Dtos
 {
-    public class UserDto
+    public class RegisterDto
     {
-        public int Id { get; set; }
+        [Required]
+        public string Email { get; set; }
+        [Required]
         public string Nombre { get; set; }
-        public string Email {get; set;}
+        [Required]
         public string Password { get; set; }
-        public PersonaDto Persona { get; set; }
     }
 }
