@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiFarmacia.Dtos;
+using AutoMapper;
 using Dominio.Entities;
 using Dominio.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -13,48 +15,57 @@ namespace ApiFarmacia.Controllers;
     public class MedicamentoRecetadoController : BaseApiController
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public MedicamentoRecetadoController(IUnitOfWork unitOfWork)
+        public MedicamentoRecetadoController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this._unitOfWork = unitOfWork;
+            this._mapper = mapper;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<IEnumerable<MedicamentoRecetado>>> Get()
+        public async Task<ActionResult<IEnumerable<MedicamentoRecetadoDto>>> Get()
         {
             var medicamentoRecetados = await _unitOfWork.MedicamentoRecetados.GetAllAsync();
-            return Ok(medicamentoRecetados);
+            return _mapper.Map<List<MedicamentoRecetadoDto>>(medicamentoRecetados);
         }
 
                 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        public async Task<IActionResult> Get (int id)
+        public async Task<ActionResult<MedicamentoRecetadoDto>> Get (int id)
         {
-            var medicamentosRecetados = await _unitOfWork.MedicamentoRecetados.GetByIdAsync(id);
-            return Ok(medicamentosRecetados);
+            var medicamentosRecetado = await _unitOfWork.MedicamentoRecetados.GetByIdAsync(id);
+            if(medicamentosRecetado == null)
+            {
+                return NotFound();
+            }
+            return this._mapper.Map<MedicamentoRecetadoDto>(medicamentosRecetado);
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<MedicamentoRecetado>> Post(MedicamentoRecetado medicamentoRecetado)
+        public async Task<ActionResult<MedicamentoRecetado>> Post(MedicamentoRecetadoDto medicamentoRecetadoDto)
         {
+            var medicamentoRecetado = _mapper.Map<MedicamentoRecetado>(medicamentoRecetadoDto);
             this._unitOfWork.MedicamentoRecetados.Add(medicamentoRecetado);
             await _unitOfWork.SaveAsync();
 
-        if(medicamentoRecetado == null)
-        {
-            return BadRequest();
-        }
-        return CreatedAtAction(nameof(Post), new {id = medicamentoRecetado.Id}, medicamentoRecetado);
-        }
+            if(medicamentoRecetado == null)
+            {
+                return BadRequest();
+            }
+            medicamentoRecetadoDto.Id = medicamentoRecetado.Id;
+            return CreatedAtAction(nameof(Post), new {id = medicamentoRecetadoDto.Id}, medicamentoRecetadoDto);
+            }
 
 
         [HttpPut("{id}")]
@@ -62,13 +73,16 @@ namespace ApiFarmacia.Controllers;
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<MedicamentoRecetado>> Put(int id, [FromBody] MedicamentoRecetado medicamentoRecetado)
+        public async Task<ActionResult<MedicamentoRecetadoDto>> Put(int id, [FromBody] MedicamentoRecetadoDto medicamentoRecetadoDto)
         {
-        if(medicamentoRecetado == null)
+        if(medicamentoRecetadoDto == null)
+        {
             return NotFound();
+        }
+            var medicamentoRecetado = this._mapper.Map<MedicamentoRecetado>(medicamentoRecetadoDto);
             _unitOfWork.MedicamentoRecetados.Update(medicamentoRecetado);
             await _unitOfWork.SaveAsync();
-            return medicamentoRecetado;
+            return medicamentoRecetadoDto;
         }
 
         [HttpDelete("{id}")]

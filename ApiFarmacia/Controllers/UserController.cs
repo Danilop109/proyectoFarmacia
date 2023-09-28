@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Dominio.Entities;
 using Dominio.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +15,12 @@ namespace ApiFarmacia.Controllers
     public class UserController : BaseApiController
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly IMapper _mapper;
 
-        public UserController(IUnitOfWork unitOfWork)
+        public UserController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
+            this._mapper = mapper;
         }
 
         [HttpGet]
