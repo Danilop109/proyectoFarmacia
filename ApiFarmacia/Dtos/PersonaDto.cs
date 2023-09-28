@@ -12,8 +12,8 @@ namespace ApiFarmacia.Dtos
         public string ApellidoPer { get; set; }
         public int TipoDocumentoFk {get; set;}
         public string DocumentoPer  {get; set; }
-        public int TipoPersonaFk {get; set; }
-        public int TipoRolFk {get; set; }
+        public TipoPersonaDto TipoPersona {get; set; }
+        public RolDto TipoRol {get; set; }
 
     }
 }

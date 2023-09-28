@@ -8,8 +8,8 @@ namespace ApiFarmacia.Dtos
     public class DepartamentoDto
     {
         public int Id {get; set;}
-        public int NombreDepartamento {get; set;}
+        public string Nombre {get; set;}
+        public int IdPaisFk { get; set; }
         public PaisDto PaisDto {get;set;}
-
     }
 }
