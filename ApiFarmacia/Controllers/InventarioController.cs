@@ -39,6 +39,19 @@ namespace ApiFarmacia.Controllers;
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
 
+        [HttpGet("MenosUnidades/{cantidad}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+
+        public async Task<ActionResult<IEnumerable<InventarioDto>>> MenosUnidades(int cantidad)
+        {
+            var inventarios = await _unitOfWork.Inventarios.ObtenerMenosStockAsync(cantidad);
+            if(inventarios == null)
+            {
+                return NotFound("No se encontraron productos menores a " + cantidad);
+            }
+            return _mapper.Map<List<InventarioDto>>(inventarios);
+        }
+
         public async Task<ActionResult<InventarioDto>> Get (int id)
         {
             var inventario = await _unitOfWork.Inventarios.GetByIdAsync(id);

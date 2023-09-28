@@ -34,5 +34,18 @@ namespace Aplicacion.Repositorio
             .FirstOrDefaultAsync(p => p.Id == id );
         }
 
+
+        // //Listar los proveedores con su información de contacto en medicamentos (OK)
+
+        // public async Task<IEnumerable<Producto>> ObtenerTodaInformacion()
+        // {
+        //     return await _context.Productos
+        //             .Include(p => p.ProductoProveedores)
+        //             .ThenInclude(s => s.Proveedor)
+        //             .Where(p => p.ProductoProveedores != null)
+        //             .ToListAsync();
+        // }
+
+
     }
 }
