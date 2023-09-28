@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiFarmacia.Dtos;
 using AutoMapper;
 using Dominio.Entities;
 using Dominio.Interfaces;
@@ -14,11 +15,13 @@ namespace ApiFarmacia.Controllers;
     public class CiudadController : BaseApiController
     {
        private readonly IUnitOfWork _unitofWork;
+       private readonly IMapper _mapper;
      
 
-       public CiudadController(IUnitOfWork unitofWork)
+       public CiudadController(IUnitOfWork unitofWork , IMapper mapper)
         {
             this._unitofWork = unitofWork;
+            this._mapper = mapper;
             
         }
 
@@ -27,28 +30,33 @@ namespace ApiFarmacia.Controllers;
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<IEnumerable<Ciudad>>> Get()
+        public async Task<ActionResult<IEnumerable<CiudadDto>>> Get()
         {
             var ciudades = await _unitofWork.Ciudades.GetAllAsync();
-            return Ok(ciudades);
+            return _mapper.Map<List<CiudadDto>>(ciudades);
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        public async Task<IActionResult> Get(int id)
+        public async Task<ActionResult<CiudadDto>> Get(int id)
         {
             var ciudad = await _unitofWork.Ciudades.GetByIdAsync(id);
-            return Ok(ciudad);
+            if(ciudad == null){
+                return NotFound();
+            }
+            return this._mapper.Map<CiudadDto>(ciudad);
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<Ciudad>> Post(Ciudad ciudad)
+        public async Task<ActionResult<Ciudad>> Post(CiudadDto ciudadDto)
         {
+            var ciudad = this._mapper.Map<Ciudad>(ciudadDto);
             this._unitofWork.Ciudades.Add(ciudad);
             await _unitofWork.SaveAsync();
 
@@ -56,7 +64,8 @@ namespace ApiFarmacia.Controllers;
             {
                 return BadRequest();
             }
-            return CreatedAtAction(nameof(Post), new {id= ciudad.Id}, ciudad);
+            ciudadDto.Id = ciudad.Id;
+            return CreatedAtAction(nameof(Post), new {id= ciudadDto.Id}, ciudadDto);
         }
 
         [HttpPut("{id}")]
@@ -65,14 +74,17 @@ namespace ApiFarmacia.Controllers;
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
 
-        public async Task<ActionResult<Ciudad>> Put(int id, [FromBody]Ciudad ciudad)
+        public async Task<ActionResult<CiudadDto>> Put(int id, [FromBody]CiudadDto ciudadDto)
         {
-            if(ciudad == null)
-            
+            if(ciudadDto == null)
+            {
                 return NotFound();
-                _unitofWork.Ciudades.Update(ciudad);
-                await _unitofWork.SaveAsync();
-                return ciudad;
+            }
+            
+            var ciudad = this._mapper.Map<Ciudad>(ciudadDto);
+            _unitofWork.Ciudades.Update(ciudad);
+            await _unitofWork.SaveAsync();
+            return ciudadDto;
             
         }
 

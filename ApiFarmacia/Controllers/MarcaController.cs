@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiFarmacia.Dtos;
+using AutoMapper;
 using Dominio.Entities;
 using Dominio.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -12,20 +14,22 @@ namespace ApiFarmacia.Controllers;
     public class MarcaController : BaseApiController
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public MarcaController(IUnitOfWork unitOfWork)
+        public MarcaController(IUnitOfWork unitOfWork,IMapper mapper)
         {
             this._unitOfWork = unitOfWork;
+            this._mapper = mapper;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<IEnumerable<Marca>>> Get()
+        public async Task<ActionResult<IEnumerable<MarcaDto>>> Get()
         {
             var marcas = await _unitOfWork.Marcas.GetAllAsync();
-            return Ok(marcas);
+            return _mapper.Map<List<MarcaDto>>(marcas);
         }
 
                 
@@ -33,27 +37,33 @@ namespace ApiFarmacia.Controllers;
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<IActionResult> Get (int id)
+        public async Task<ActionResult<MarcaDto>> Get (int id)
         {
             var marca = await _unitOfWork.Marcas.GetByIdAsync(id);
-            return Ok(marca);
+            if(marca == null)
+            {
+                return NotFound();
+            }
+         
+            return _mapper.Map<MarcaDto>(marca);
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<Marca>> Post(Marca marca)
+        public async Task<ActionResult<Marca>> Post(MarcaDto marcaDto)
         {
+            var marca = this._mapper.Map<Marca>(marcaDto);
             this._unitOfWork.Marcas.Add(marca);
             await _unitOfWork.SaveAsync();
-
-        if(marca == null)
-        {
-            return BadRequest();
-        }
-        return CreatedAtAction(nameof(Post), new {id = marca.Id}, marca);
-        }
+            if(marca == null)
+            {
+                return BadRequest();
+            }
+            marcaDto.Id = marca.Id;
+            return CreatedAtAction(nameof(Post), new {id = marcaDto.Id}, marcaDto);
+            }
 
 
         [HttpPut("{id}")]
@@ -61,13 +71,16 @@ namespace ApiFarmacia.Controllers;
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<Marca>> Put(int id, [FromBody] Marca marca)
+        public async Task<ActionResult<MarcaDto>> Put(int id, [FromBody] MarcaDto marcaDto)
         {
-        if(marca == null)
+        if(marcaDto == null)
+        {
             return NotFound();
+        }
+            var marca = this._mapper.Map<Marca>(marcaDto);
             _unitOfWork.Marcas.Update(marca);
             await _unitOfWork.SaveAsync();
-            return marca;
+            return marcaDto;
         }
 
         [HttpDelete("{id}")]
