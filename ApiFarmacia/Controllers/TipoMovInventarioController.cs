@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiFarmacia.Dtos;
 using AutoMapper;
 using Dominio.Entities;
 using Dominio.Interfaces;
@@ -77,7 +78,7 @@ namespace ApiFarmacia.Controllers
             var tipoMovInventario = this.mapper.Map<TipoMovInventario>(tipoMovInventarioDto);
             unitOfWork.TipoMovInventarios.Update(tipoMovInventario);
             await unitOfWork.SaveAsync();
-            return tipoMovInventario;
+            return tipoMovInventarioDto;
         }
 
         [HttpDelete("{id}")]
