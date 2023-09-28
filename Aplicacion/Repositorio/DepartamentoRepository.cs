@@ -16,7 +16,7 @@ namespace Aplicacion.Repositorio
     public override async Task<IEnumerable<Departamento>> GetAllAsync()
     {
         return await _context.Departamentos
-        .Include(p => p.Pais)
+        .Include(d => d.Pais)
         .ToListAsync();
     }
 
