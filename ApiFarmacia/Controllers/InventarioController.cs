@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiFarmacia.Dtos;
+using AutoMapper;
 using Dominio.Entities;
 using Dominio.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -13,48 +15,56 @@ namespace ApiFarmacia.Controllers;
     public class InventarioController : BaseApiController
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public InventarioController(IUnitOfWork unitOfWork)
+        public InventarioController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this._unitOfWork = unitOfWork;
+            this._mapper = mapper;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<IEnumerable<Inventario>>> Get()
+        public async Task<ActionResult<IEnumerable<InventarioDto>>> Get()
         {
-            var inventarios = await _unitOfWork.Inventarios.GetAllAsync();
-            return Ok(inventarios);
+            var inventario = await _unitOfWork.Inventarios.GetAllAsync();
+            return _mapper.Map<List<InventarioDto>>(inventario);
         }
 
                 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        public async Task<IActionResult> Get (int id)
+        public async Task<ActionResult<InventarioDto>> Get (int id)
         {
             var inventario = await _unitOfWork.Inventarios.GetByIdAsync(id);
-            return Ok(inventario);
+            if(inventario == null)
+            {
+                return NotFound();
+            }
+            return this._mapper.Map<InventarioDto>(inventario);
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<Inventario>> Post(Inventario inventario)
+        public async Task<ActionResult<Inventario>> Post(InventarioDto inventarioDto)
         {
+            var inventario = this._mapper.Map<Inventario>(inventarioDto);
             this._unitOfWork.Inventarios.Add(inventario);
             await _unitOfWork.SaveAsync();
-
-        if(inventario == null)
-        {
-            return BadRequest();
-        }
-        return CreatedAtAction(nameof(Post), new {id = inventario.Id}, inventario);
-        }
+            if(inventario == null)
+            {
+                return BadRequest();
+            }
+            inventarioDto.Id = inventario.Id;
+            return CreatedAtAction(nameof(Post), new {id = inventarioDto.Id}, inventarioDto);
+            }
 
 
         [HttpPut("{id}")]
@@ -62,13 +72,16 @@ namespace ApiFarmacia.Controllers;
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<Inventario>> Put(int id, [FromBody] Inventario inventario)
+        public async Task<ActionResult<InventarioDto>> Put(int id, [FromBody] InventarioDto inventarioDto)
         {
-        if(inventario == null)
+        if(inventarioDto == null)
+        {
             return NotFound();
+        }
+            var inventario = this._mapper.Map<Inventario>(inventarioDto);
             _unitOfWork.Inventarios.Update(inventario);
             await _unitOfWork.SaveAsync();
-            return inventario;
+            return inventarioDto;
         }
 
         [HttpDelete("{id}")]
