@@ -47,6 +47,16 @@ namespace ApiFarmacia.Controllers
             return mapper.Map<RecetaMedicaDto>(llamado);
         }
 
+        [HttpGet("RecetaSinceDate/{date}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+
+        public async Task<ActionResult<IEnumerable<RecetaMedicaDto>>> Get3(DateTime date)
+        {
+            var receta= await unitOfWork.RecetaMedicas.GetRecetaSinceDate(date);
+            return mapper.Map<List<RecetaMedicaDto>>(receta);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
