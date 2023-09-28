@@ -37,7 +37,6 @@ public class InventarioController : BaseApiController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-
     public async Task<ActionResult<InventarioDto>> Get(int id)
     {
         var inventario = await _unitOfWork.Inventarios.GetByIdAsync(id);
@@ -47,6 +46,9 @@ public class InventarioController : BaseApiController
         }
         return this._mapper.Map<InventarioDto>(inventario);
     }
+
+
+    //Obetener todos los medicamentos con menos de (x) unidades en stock
 
     [HttpGet("MenosUnidades/{cantidad}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -87,6 +89,7 @@ public class InventarioController : BaseApiController
         var inventario = await _unitOfWork.Inventarios.GetAllAsync();
         return _mapper.Map<List<InventarioDto>>(inventario);
     }
+
 
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
