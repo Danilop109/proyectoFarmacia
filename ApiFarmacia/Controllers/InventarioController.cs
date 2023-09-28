@@ -26,7 +26,6 @@ public class InventarioController : BaseApiController
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-
     public async Task<ActionResult<IEnumerable<InventarioDto>>> Get()
     {
         var inventario = await _unitOfWork.Inventarios.GetAllAsync();
@@ -51,6 +50,9 @@ public class InventarioController : BaseApiController
 
     [HttpGet("MenosUnidades/{cantidad}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+
+
+    //Obetener todos los medicamentos con menos de (x) unidades en stock
 
     public async Task<ActionResult<IEnumerable<InventarioDto>>> MenosUnidades(int cantidad)
     {
@@ -80,7 +82,11 @@ public class InventarioController : BaseApiController
         inventarioDto.Id = inventario.Id;
         return CreatedAtAction(nameof(Post), new { id = inventarioDto.Id }, inventarioDto);
     }
-
+    public async Task<ActionResult<IEnumerable<InventarioDto>>> Get5()
+    {
+        var inventario = await _unitOfWork.Inventarios.GetAllAsync();
+        return _mapper.Map<List<InventarioDto>>(inventario);
+    }
 
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
