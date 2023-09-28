@@ -22,10 +22,6 @@ builder.Services.AddDbContext<ApiFarmaciaContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
-
-
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiFarmacia.Dtos;
+using AutoMapper;
 using Dominio.Entities;
 using Dominio.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -13,45 +15,53 @@ namespace ApiFarmacia.Controllers
     public class PresentacionController : BaseApiController
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly IMapper mapper;
 
-        public PresentacionController(IUnitOfWork unitOfWork)
+        public PresentacionController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<IEnumerable<Presentacion>>> Get()
+        public async Task<ActionResult<IEnumerable<PresentacionDto>>> Get()
         {
             var presentaciones = await unitOfWork.Presentaciones.GetAllAsync();
-            return Ok(presentaciones);
+            return mapper.Map<List<PresentacionDto>> (presentaciones);
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        public async Task<ActionResult> Get(int id)
+        public async Task<ActionResult<PresentacionDto>> Get(int id)
         {
             var presentacion = await unitOfWork.Presentaciones.GetByIdAsync(id);
-            return Ok(presentacion);
+            if(presentacion == null){
+                return NotFound();
+            }
+            return mapper.Map<PresentacionDto>(presentacion);
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<Presentacion>> Post(Presentacion presentacion)
+        public async Task<ActionResult<Presentacion>> Post(PresentacionDto presentacionDto)
         {
+            var presentacion= mapper.Map<Presentacion>(presentacionDto);
             this.unitOfWork.Presentaciones.Add(presentacion);
             await unitOfWork.SaveAsync();
             if (presentacion == null)
             {
                 return BadRequest();
             }
-            return CreatedAtAction(nameof(Post), new { id = presentacion.Id }, presentacion);
+            presentacionDto.Id = presentacion.Id;
+            return CreatedAtAction(nameof(Post), new { id = presentacionDto.Id }, presentacionDto);
         }
 
         [HttpPut("{id}")]
@@ -59,13 +69,15 @@ namespace ApiFarmacia.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<Presentacion>> Put(int id,[FromBody] Presentacion presentacion)
+        public async Task<ActionResult<PresentacionDto>> Put(int id,[FromBody] PresentacionDto presentacionDto)
         {
-            if(presentacion == null)
-            return NotFound();
+            if(presentacionDto == null){
+                return NotFound();
+            }
+            var presentacion = mapper.Map<Presentacion>(presentacionDto);
             unitOfWork.Presentaciones.Update(presentacion);
             await unitOfWork.SaveAsync();
-            return presentacion;
+            return presentacionDto;
         }
 
         [HttpDelete("{id}")]
