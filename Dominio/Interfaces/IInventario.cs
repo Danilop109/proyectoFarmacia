@@ -6,6 +6,5 @@ namespace Dominio.Interfaces
     {
        Task<IEnumerable<Inventario>> ObtenerMenosStockAsync(int cantidad);
 
-
     }
 }
