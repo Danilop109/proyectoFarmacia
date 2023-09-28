@@ -50,7 +50,7 @@ public class InventarioController : BaseApiController
     }
 
 
-    //Obetener todos los medicamentos con menos de (x) unidades en stock
+    //Obetener todos los medicamentos con menos de (x) unidades en stock pene
 
     [HttpGet("MenosUnidades/{cantidad}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
