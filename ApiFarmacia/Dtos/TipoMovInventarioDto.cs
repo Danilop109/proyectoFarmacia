@@ -7,6 +7,9 @@ namespace ApiFarmacia.Dtos
 {
     public class TipoMovInventarioDto
     {
+        public int Id {get; set;}
+        public string Descripcion {get; set;}
+
         
     }
 }
