@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Dominio.Entities;
 using Dominio.Interfaces;
@@ -30,5 +31,16 @@ namespace Aplicacion.Repositorio
             .Include(p => p.Presentacion )
             .FirstOrDefaultAsync(p => p.Id == id);
         }
+
+        //Obtener todos los medicamentos con menos de (x) unidades en stock
+
+        public async Task<IEnumerable<Inventario>> ObtenerMenosStockAsync(int cantidad)
+        {
+            return await _context.Inventarios
+            .Where(p => p.Stock < cantidad)
+            .ToListAsync();
+        }
+
+
     }
 }
