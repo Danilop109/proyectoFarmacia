@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiFarmacia.Dtos;
+using AutoMapper;
 using Dominio.Entities;
 using Dominio.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -10,49 +12,55 @@ using Microsoft.Extensions.Logging;
 
 namespace ApiFarmacia.Controllers
 {
-    [Route("[controller]")]
     public class RecetaMedicaController : BaseApiController
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly IMapper mapper;
 
-        public RecetaMedicaController(IUnitOfWork unitOfWork)
+        public RecetaMedicaController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            this.unitOfWork = unitOfWork;
+            this.unitOfWork =unitOfWork;
+            this.mapper =mapper;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<IEnumerable<RecetaMedica>>> Get()
+        public async Task<ActionResult<IEnumerable<RecetaMedicaDto>>> Get()
         {
             var llamado = await unitOfWork.RecetaMedicas.GetAllAsync();
-            return Ok(llamado);
+            return  mapper.Map<List<RecetaMedicaDto>>(llamado);
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        public async Task<ActionResult> Get(int id)
+        public async Task<ActionResult<RecetaMedicaDto>> Get(int id)
         {
             var llamado = await unitOfWork.RecetaMedicas.GetByIdAsync(id);
-            return Ok(llamado);
+            if (llamado == null){
+                return NotFound();
+            }
+            return mapper.Map<RecetaMedicaDto>(llamado);
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<RecetaMedica>> Post(RecetaMedica recetaMedica)
+        public async Task<ActionResult<RecetaMedica>> Post(RecetaMedicaDto recetaMedicaDto)
         {
-            this.unitOfWork.RecetaMedicas.Add(recetaMedica);
+            var llamado = this.mapper.Map<RecetaMedica>(recetaMedicaDto);
+            this.unitOfWork.RecetaMedicas.Add(llamado);
             await unitOfWork.SaveAsync();
-            if (recetaMedica == null)
+            if (llamado == null)
             {
                 return BadRequest();
             }
-            return CreatedAtAction(nameof(Post), new { id = recetaMedica.Id }, recetaMedica);
+            return CreatedAtAction(nameof(Post), new { id = recetaMedicaDto.Id }, recetaMedicaDto);
         }
 
         [HttpPut("{id}")]
@@ -60,13 +68,14 @@ namespace ApiFarmacia.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<RecetaMedica>> Put(int id, [FromBody] RecetaMedica recetaMedica)
+        public async Task<ActionResult<RecetaMedicaDto>> Put(int id, [FromBody] RecetaMedicaDto recetaMedicaDto)
         {
-            if (recetaMedica == null)
+            if (recetaMedicaDto == null)
                 return NotFound();
-            unitOfWork.RecetaMedicas.Update(recetaMedica);
+            var llamado = mapper.Map<RecetaMedica>(recetaMedicaDto);
+            unitOfWork.RecetaMedicas.Update(llamado);
             await unitOfWork.SaveAsync();
-            return recetaMedica;
+            return recetaMedicaDto;
         }
 
         [HttpDelete("{id}")]

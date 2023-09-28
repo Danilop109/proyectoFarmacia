@@ -7,6 +7,7 @@ namespace ApiFarmacia.Dtos
 {
     public class TipoContactoDto
     {
-        
+        public int Id { get; set; }
+        public string NombreTipocCon { get; set; }
     }
 }
