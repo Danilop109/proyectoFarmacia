@@ -56,9 +56,6 @@ namespace ApiFarmacia.Controllers;
                 return mapper.Map<List<ProductoDto>>(producto);
         }
 
-        
-        
-
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
