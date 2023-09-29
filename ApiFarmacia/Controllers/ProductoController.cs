@@ -45,6 +45,16 @@ namespace ApiFarmacia.Controllers;
             }
             return mapper.Map<ProductoDto>(llamado);
         }
+
+        [HttpGet("medicamentosComprados/{nombre}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+
+        public async Task<IEnumerable<ProductoDto>> Get3(string nombre)
+        {
+                var producto = await unitOfWork.Productos.MedicamentosCompradosPorProveedor(nombre);
+ 
+                return mapper.Map<List<ProductoDto>>(producto);
+        }
         
 
         [HttpPost]
