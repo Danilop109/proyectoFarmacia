@@ -56,6 +56,20 @@ namespace ApiFarmacia.Controllers;
                 return mapper.Map<List<ProductoDto>>(producto);
         }
 
+        [HttpGet("mediExpiraAntes/{dateExpire}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+
+        public async Task<ActionResult<IEnumerable<ProductoDto>>> GetExpire(DateTime dateExpire)
+        {
+            var producto = await unitOfWork.Productos.GetMediExpireBeforeDate(dateExpire);
+            if (producto == null)
+            {
+                return BadRequest("No se encontraron productos a expirar en la fecha " + dateExpire );
+            }
+            return mapper.Map<List<ProductoDto>> (producto);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
