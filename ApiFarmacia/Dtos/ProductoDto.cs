@@ -10,7 +10,6 @@ namespace ApiFarmacia.Dtos
         public int Id { get; set; }
         public double Precio {get; set;}
         public int Cantidad {get; set;}
-        public DateTime FechaCaducidad {get; set;}
         public List<ProveedorDto> Proveedores{ get; set; }
     }
 }
