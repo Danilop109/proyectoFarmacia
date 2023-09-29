@@ -55,6 +55,8 @@ namespace ApiFarmacia.Controllers;
  
                 return mapper.Map<List<ProductoDto>>(producto);
         }
+
+        
         
 
         [HttpPost]
