@@ -41,8 +41,6 @@ namespace Aplicacion.Repositorio
             .ToListAsync();
         }
 
-        
-
 
     }
 }

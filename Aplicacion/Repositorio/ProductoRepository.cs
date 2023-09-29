@@ -34,12 +34,17 @@ namespace Aplicacion.Repositorio
             .FirstOrDefaultAsync(p => p.Id == id );
         }
 
-        public async Task<IEnumerable<Producto>> GetMediExpireBeforeDate(DateTime expireDate)
+         //Medicamentos comprados a un provedor (x)
+
+        public async Task<IEnumerable<Producto>> MedicamentosCompradosPorProveedor(string nombre)
         {
             return await _context.Productos
-                        .Where(d => d.FechaCaducidad.Date <= expireDate)
-                        .ToListAsync();
-        }
+                            .Where(product =>
+                            product.ProductoProveedores.Any(compraProducto =>
+                            compraProducto.Proveedor.Nombre.ToUpper() == nombre.ToUpper() ))
+                            //.Include(p => p.ProductoProveedores)
+                            .ToListAsync();
 
     }
+}
 }

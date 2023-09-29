@@ -176,6 +176,10 @@ namespace Persistencia.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("FechaExpiracion")
+                        .HasColumnType("DateTime")
+                        .HasColumnName("fechaExpiracion");
+
                     b.Property<int>("IdPresentacionFk")
                         .HasColumnType("int");
 
@@ -385,10 +389,6 @@ namespace Persistencia.Data.Migrations
                         .HasMaxLength(3)
                         .HasColumnType("int")
                         .HasColumnName("Cantidad");
-
-                    b.Property<DateTime>("FechaCaducidad")
-                        .HasColumnType("DateTime")
-                        .HasColumnName("fechaCaducidad");
 
                     b.Property<int>("IdInventarioFk")
                         .HasColumnType("int");
