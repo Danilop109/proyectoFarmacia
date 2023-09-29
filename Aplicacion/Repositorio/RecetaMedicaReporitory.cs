@@ -36,12 +36,13 @@ namespace Aplicacion.Repositorio
 
         public async Task<IEnumerable<RecetaMedica>> GetRecetaSinceDate(DateTime date)
         {
-            return await _context.RecetaMedicas
+                return await _context.RecetaMedicas
                             .Where (d => d.FechaEmicion.Date >= date.Date)
                             .Include(m => m.MedicamentoRecetados).ThenInclude(m => m.Inventario)
                             .Include(d => d.DoctorFk)
-                            .Include(p => p.PacienteFk)
+                            .Include(d => d.PacienteFk)
                             .ToListAsync();
+             
         }
     }
 }

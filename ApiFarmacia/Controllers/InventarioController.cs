@@ -63,8 +63,6 @@ public class InventarioController : BaseApiController
         return _mapper.Map<List<InventarioDto>>(inventarios);
     }
 
-
-
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

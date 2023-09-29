@@ -34,6 +34,7 @@ namespace Aplicacion.Repositorio
             .FirstOrDefaultAsync(p => p.Id == id );
         }
 
+<<<<<<< HEAD
          //Medicamentos comprados a un provedor (x)
 
         public async Task<IEnumerable<Producto>> MedicamentosCompradosPorProveedor(string nombre)
@@ -44,6 +45,14 @@ namespace Aplicacion.Repositorio
                             compraProducto.Proveedor.Nombre.ToUpper() == nombre.ToUpper() ))
                             //.Include(p => p.ProductoProveedores)
                             .ToListAsync();
+=======
+        public async Task<IEnumerable<Producto>> GetMediExpireBeforeDate(DateTime expireDate)
+        {
+            return await _context.Productos
+                        .Where(d => d.FechaCaducidad.Date <= expireDate)
+                        .ToListAsync();
+        }
+>>>>>>> 0758ef3057c78aa3976eff085edd50ccd4ef57e6
 
     }
 }
