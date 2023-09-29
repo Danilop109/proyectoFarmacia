@@ -36,5 +36,7 @@ namespace Aplicacion.Repositorio
             .Include(p => p.Rol)
             .FirstOrDefaultAsync(p => p.Id == id);
         }
+
+
     }
 }
