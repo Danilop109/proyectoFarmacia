@@ -20,7 +20,7 @@ namespace Aplicacion.Repositorio
         public override async Task<IEnumerable<ProductoProveedor>> GetAllAsync()
         {
             return await _context.ProductoProveedores
-            .Include(p=> p.Proveedor).ThenInclude(p => p.Rol)
+            .Include(p => p.Proveedor).ThenInclude(p => p.Rol)
             .ToListAsync();
         }
 
@@ -38,15 +38,23 @@ namespace Aplicacion.Repositorio
 
         }
 
-         //Listar los proveedores con su información de contacto en medicamentos (OK)
+        //Listar los proveedores con su información de contacto en medicamentos (OK)
 
-         public async Task<IEnumerable<ProductoProveedor>> ObtenerTodaInformacion()
-         {
-             return await _context.ProductoProveedores
-                   .Include(p => p.Producto)
-                   .ThenInclude(p => p.Inventario)
-                    .Where(p => p.Proveedor != null)
-                   .ToListAsync();
-         }
+        public async Task<IEnumerable<ProductoProveedor>> ObtenerTodaInformacion()
+        {
+            return await _context.ProductoProveedores
+                  .Include(p => p.Producto)
+                  .ThenInclude(p => p.Inventario)
+                   .Where(p => p.Proveedor != null)
+                  .ToListAsync();
+
+        
+        }
+
+                            
+                        
+                    
+       
+
     }
 }
