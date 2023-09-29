@@ -34,7 +34,12 @@ namespace Aplicacion.Repositorio
             .FirstOrDefaultAsync(p => p.Id == id );
         }
 
-
+        public async Task<IEnumerable<Producto>> GetMediExpireBeforeDate(DateTime expireDate)
+        {
+            return await _context.Productos
+                        .Where(d => d.FechaCaducidad.Date <= expireDate)
+                        .ToListAsync();
+        }
 
     }
 }

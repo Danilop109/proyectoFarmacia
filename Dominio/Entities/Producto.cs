@@ -10,6 +10,7 @@ namespace Dominio.Entities
         public string Nombre {get; set;}
         public double Precio {get; set;}
         public int Cantidad {get; set;}
+        public DateTime FechaCaducidad {get; set;}
         public int IdMarcaFk {get; set;}
         public Marca Marca {get; set;}
         public int IdInventarioFk {get; set;}
