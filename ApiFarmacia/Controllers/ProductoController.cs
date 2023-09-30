@@ -70,6 +70,15 @@ namespace ApiFarmacia.Controllers;
             return mapper.Map<List<ProductoDto>> (producto);
         }
 
+        [HttpGet("medicamentoMasCaro")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+
+        public async Task<ActionResult<ProductoDto>> GetExpensiveOneMedi()
+        {
+            var caro = await unitOfWork.Productos.MediMoreExpensive();
+            return  mapper.Map<ProductoDto>(caro);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

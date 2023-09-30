@@ -16,7 +16,6 @@ namespace ApiFarmacia.Dtos
         public int IdTipoPersonaFk {get; set;}
         public TipoPersonaDto TipoPersona {get; set; }
         public RolDto TipoRol {get; set; }
-
         public int IdProductoProveedor {get; set;}
         public ProductoDto ProductoDto {get;set;}
 

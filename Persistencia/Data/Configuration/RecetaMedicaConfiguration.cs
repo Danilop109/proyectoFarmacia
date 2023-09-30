@@ -12,7 +12,7 @@ namespace Persistencia.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<RecetaMedica> builder)
         {
-            builder.ToTable("recetaMedica");
+            builder.ToTable("RecetaMedica");
 
             builder.Property(p => p.FechaEmicion)
             .HasColumnName("FechaEmicion")
@@ -37,6 +37,14 @@ namespace Persistencia.Data.Configuration
              builder.HasOne(p => p.DoctorFk)
             .WithMany(p=> p.DoctorCollection)
             .HasForeignKey(p => p.IdDoctorFk);
+
+            builder
+            .HasOne(p => p.InventarioFk)
+            .WithMany(p=> p.RecetaMedicas)
+            .HasForeignKey(p => p.InventarioId)
+            
+            
+            ;
 
             builder.HasOne(m => m.MovimientoInventario)
             .WithOne( m => m.RecetaMedica)

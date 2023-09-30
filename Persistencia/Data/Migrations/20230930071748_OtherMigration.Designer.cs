@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistencia;
 
@@ -10,9 +11,11 @@ using Persistencia;
 namespace Persistencia.Data.Migrations
 {
     [DbContext(typeof(ApiFarmaciaContext))]
-    partial class ApiFarmaciaContextModelSnapshot : ModelSnapshot
+    [Migration("20230930071748_OtherMigration")]
+    partial class OtherMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -461,19 +464,19 @@ namespace Persistencia.Data.Migrations
                     b.Property<int>("IdDoctorFk")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdPacienteFk")
+                    b.Property<int>("IdInventarioFk")
                         .HasColumnType("int");
 
-                    b.Property<int>("InventarioId")
+                    b.Property<int>("IdPacienteFk")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IdDoctorFk");
 
-                    b.HasIndex("IdPacienteFk");
+                    b.HasIndex("IdInventarioFk");
 
-                    b.HasIndex("InventarioId");
+                    b.HasIndex("IdPacienteFk");
 
                     b.ToTable("RecetaMedica", (string)null);
                 });
@@ -870,15 +873,15 @@ namespace Persistencia.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Dominio.Entities.Persona", "PacienteFk")
-                        .WithMany("PacienteCollection")
-                        .HasForeignKey("IdPacienteFk")
+                    b.HasOne("Dominio.Entities.Inventario", "InventarioFk")
+                        .WithMany("RecetaMedicas")
+                        .HasForeignKey("IdInventarioFk")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Dominio.Entities.Inventario", "InventarioFk")
-                        .WithMany("RecetaMedicas")
-                        .HasForeignKey("InventarioId")
+                    b.HasOne("Dominio.Entities.Persona", "PacienteFk")
+                        .WithMany("PacienteCollection")
+                        .HasForeignKey("IdPacienteFk")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
