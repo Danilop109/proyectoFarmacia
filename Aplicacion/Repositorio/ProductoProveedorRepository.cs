@@ -37,24 +37,14 @@ namespace Aplicacion.Repositorio
             .FirstOrDefaultAsync(p => p.Id == id);
 
         }
-
-        //Listar los proveedores con su información de contacto en medicamentos (OK)
-
-        public async Task<IEnumerable<ProductoProveedor>> ObtenerTodaInformacion()
+        //Listar los proveedores con su información de contacto en medicamentos.
+        public async Task<IEnumerable<ProductoProveedor>> GetContactSupplier()
         {
             return await _context.ProductoProveedores
-                  .Include(p => p.Producto)
-                  .ThenInclude(p => p.Inventario)
-                   .Where(p => p.Proveedor != null)
-                  .ToListAsync();
-
-        
+                .Include(p => p.Proveedor)
+                .Include(p => p.Producto)
+                .ToListAsync();
         }
-
-                            
-                        
-                    
-       
 
     }
 }

@@ -31,6 +31,11 @@ namespace Persistencia.Data.Configuration
             .IsRequired()
             .HasMaxLength(3);
 
+            builder.Property(p => p.FechaCaducidad)
+            .HasColumnName("fechaCaducidad")
+            .HasColumnType("DateTime")
+            .IsRequired();
+
             builder.HasOne(m => m.Marca)
             .WithMany(m => m.Productos)
             .HasForeignKey(m=> m.IdMarcaFk);

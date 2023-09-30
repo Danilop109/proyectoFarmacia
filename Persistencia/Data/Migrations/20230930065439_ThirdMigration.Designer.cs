@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistencia;
 
@@ -10,9 +11,11 @@ using Persistencia;
 namespace Persistencia.Data.Migrations
 {
     [DbContext(typeof(ApiFarmaciaContext))]
-    partial class ApiFarmaciaContextModelSnapshot : ModelSnapshot
+    [Migration("20230930065439_ThirdMigration")]
+    partial class ThirdMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -461,15 +464,20 @@ namespace Persistencia.Data.Migrations
                     b.Property<int>("IdDoctorFk")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdInventarioFk")
+                        .HasColumnType("int");
+
                     b.Property<int>("IdPacienteFk")
                         .HasColumnType("int");
 
-                    b.Property<int>("InventarioId")
+                    b.Property<int?>("InventarioId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IdDoctorFk");
+
+                    b.HasIndex("IdInventarioFk");
 
                     b.HasIndex("IdPacienteFk");
 
@@ -870,17 +878,21 @@ namespace Persistencia.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Dominio.Entities.Inventario", "InventarioFk")
+                        .WithMany("RecetaMedicas")
+                        .HasForeignKey("IdInventarioFk")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Dominio.Entities.Persona", "PacienteFk")
                         .WithMany("PacienteCollection")
                         .HasForeignKey("IdPacienteFk")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Dominio.Entities.Inventario", "InventarioFk")
-                        .WithMany("RecetaMedicas")
-                        .HasForeignKey("InventarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Dominio.Entities.Inventario", null)
+                        .WithMany("RecetaMedica")
+                        .HasForeignKey("InventarioId");
 
                     b.Navigation("DoctorFk");
 
@@ -952,6 +964,8 @@ namespace Persistencia.Data.Migrations
                     b.Navigation("MedicamentoRecetados");
 
                     b.Navigation("Productos");
+
+                    b.Navigation("RecetaMedica");
 
                     b.Navigation("RecetaMedicas");
                 });

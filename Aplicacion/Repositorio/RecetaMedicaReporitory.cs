@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dominio.Entities;
 using Dominio.Interfaces;
+using iText.Barcodes.Dmcode;
 using Microsoft.EntityFrameworkCore;
 using Persistencia;
 
@@ -34,6 +35,7 @@ namespace Aplicacion.Repositorio
             .FirstOrDefaultAsync(p => p.Id == id);
         }
 
+        //Obtener recetas médicas emitidas después del 1 de enero de 2023.
         public async Task<IEnumerable<RecetaMedica>> GetRecetaSinceDate(DateTime date)
         {
             return await _context.RecetaMedicas
@@ -43,5 +45,8 @@ namespace Aplicacion.Repositorio
                             .Include(p => p.PacienteFk)
                             .ToListAsync();
         }
+
+        
+    
     }
 }

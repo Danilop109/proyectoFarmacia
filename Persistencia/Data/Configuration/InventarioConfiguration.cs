@@ -33,11 +33,6 @@ namespace Persistencia.Data.Configuration
             .HasColumnType("int")
             .IsRequired();
 
-            builder.Property(p => p.FechaExpiracion)
-            .HasColumnName("fechaExpiracion")
-            .HasColumnType("DateTime")
-            .IsRequired();
-
             builder.HasOne(p => p.Presentacion)
             .WithMany(p => p.Inventarios)
             .HasForeignKey(p => p.IdPresentacionFk);

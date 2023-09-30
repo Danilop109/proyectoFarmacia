@@ -3,7 +3,9 @@ namespace Dominio.Interfaces
 {
     public interface IProducto : IGenericRepository<Producto>
     {
+      Task<IEnumerable<Producto>> GetMediExpireBeforeDate( DateTime expireDate);
       Task<IEnumerable<Producto>> MedicamentosCompradosPorProveedor(string nombre);
+      Task<Producto> MediMoreExpensive();
     }
     
 }

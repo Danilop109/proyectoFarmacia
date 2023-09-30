@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using ApiFarmacia.Dtos;
+using Aplicacion.UnitOfWork;
 using AutoMapper;
 using Dominio.Entities;
 using Dominio.Interfaces;
@@ -48,6 +49,26 @@ namespace ApiFarmacia.Controllers;
                 }
                 return this._mapper.Map<MovimientoInventario>(movimientoInventario);
             }
+
+            [HttpGet("totalSales")]
+
+        public async Task<double> GetSales()
+        {
+                var producto = await _unitOfWork.MovimientoInventarios.MediTotalSales();
+ 
+                return _mapper.Map<double>(producto);
+        }
+
+            [HttpGet("GetPatientParacetamol")]
+         
+
+            public async Task<IEnumerable<PersonaDto>> GetPatient()
+            {
+                var patientParacetamol = await _unitOfWork.MovimientoInventarios.GetPatientParacetamol();
+                return _mapper.Map<IEnumerable<PersonaDto>> (patientParacetamol);
+            }
+
+
 
             [HttpPost]
             [ProducesResponseType(StatusCodes.Status201Created)]

@@ -8,8 +8,9 @@ namespace ApiFarmacia.Dtos
     public class ProductoDto
     {
         public int Id { get; set; }
+        public string Nombre {get; set;}
         public double Precio {get; set;}
         public int Cantidad {get; set;}
-        public List<ProveedorDto> Proveedores{ get; set; }
+        public DateTime FechaCaducidad {get; set;}
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistencia;
 
@@ -10,9 +11,11 @@ using Persistencia;
 namespace Persistencia.Data.Migrations
 {
     [DbContext(typeof(ApiFarmaciaContext))]
-    partial class ApiFarmaciaContextModelSnapshot : ModelSnapshot
+    [Migration("20230929220317_SecondMigration")]
+    partial class SecondMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -464,7 +467,7 @@ namespace Persistencia.Data.Migrations
                     b.Property<int>("IdPacienteFk")
                         .HasColumnType("int");
 
-                    b.Property<int>("InventarioId")
+                    b.Property<int?>("InventarioId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -475,7 +478,7 @@ namespace Persistencia.Data.Migrations
 
                     b.HasIndex("InventarioId");
 
-                    b.ToTable("RecetaMedica", (string)null);
+                    b.ToTable("recetaMedica", (string)null);
                 });
 
             modelBuilder.Entity("Dominio.Entities.RefreshToken", b =>
@@ -876,15 +879,11 @@ namespace Persistencia.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Dominio.Entities.Inventario", "InventarioFk")
-                        .WithMany("RecetaMedicas")
-                        .HasForeignKey("InventarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Dominio.Entities.Inventario", null)
+                        .WithMany("RecetaMedica")
+                        .HasForeignKey("InventarioId");
 
                     b.Navigation("DoctorFk");
-
-                    b.Navigation("InventarioFk");
 
                     b.Navigation("PacienteFk");
                 });
@@ -953,7 +952,7 @@ namespace Persistencia.Data.Migrations
 
                     b.Navigation("Productos");
 
-                    b.Navigation("RecetaMedicas");
+                    b.Navigation("RecetaMedica");
                 });
 
             modelBuilder.Entity("Dominio.Entities.Marca", b =>
