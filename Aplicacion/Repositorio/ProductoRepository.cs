@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Dominio.Entities;
 using Dominio.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Persistencia;
 
 namespace Aplicacion.Repositorio
@@ -45,6 +46,22 @@ namespace Aplicacion.Repositorio
                             //.Include(p => p.ProductoProveedores)
                             .ToListAsync();
 
-    }
+        }
+        //  Medicamentos antes de que se caduquen en una fecha
+        public async Task<IEnumerable<Producto>> GetMediExpireBeforeDate(DateTime expireDate)
+        {
+            return await _context.Productos
+                        .Where(d => d.FechaCaducidad.Date <= expireDate)
+                        .ToListAsync();
+        }
+
+        //Obtener el medicamento más caro.
+        public async Task<Producto> MediMoreExpensive()
+        {
+            return await _context.Productos.OrderByDescending(d => d.Precio)
+            .FirstOrDefaultAsync();
+        }
+
+        
 }
 }

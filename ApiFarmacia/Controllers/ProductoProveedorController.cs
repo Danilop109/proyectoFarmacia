@@ -55,7 +55,7 @@ namespace ApiFarmacia.Controllers
 
         public async Task<ActionResult<IEnumerable<ProductoProveedorDto>>> Get1()
         {
-            var productos = await unitOfWork.ProductoProveedores.ObtenerTodaInformacion();
+            var productos = await unitOfWork.ProductoProveedores.GetContactSupplier();
             if(productos == null)
             {
                 return BadRequest();

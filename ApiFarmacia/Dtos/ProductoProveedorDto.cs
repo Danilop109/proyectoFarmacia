@@ -10,9 +10,8 @@ namespace ApiFarmacia.Dtos
         public int Id { get; set; }
         // public DateTime FechaCompra {get;set;}
         // public MovimientoInventarioDto MovimientoInventarioDto {get;set;}
-
-        public ProductoDto ProductoDto{ get; set; }
-        public ProveedorDto ProveedorDto{ get; set;}
+        public ProductoDto Producto{ get; set; }
+        public PersonaDto Proveedor{ get; set;}
 
 
     }
