@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Aplicacion.UnitOfWork;
+using AspNetCoreRateLimit;
 using Dominio.Interfaces;
 
 namespace ApiFarmacia.Extensions;
@@ -17,10 +18,33 @@ namespace ApiFarmacia.Extensions;
             .AllowAnyHeader());           //WithHeaders (*accept*, "content-type")
         });
 
-        public static void AddAplicacionServices(this IServiceCollection services)
+        public static void AddAplicationServices(this IServiceCollection services)
             {
                 // services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
                 // services.AddScoped<IUserService, UserService>(); 
                 services.AddScoped<IUnitOfWork, UnitOfWork>();
             }
+
+        public static void ConfigureRatelimiting(this IServiceCollection services)
+        {
+            services.AddMemoryCache();
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+            services.AddInMemoryRateLimiting();
+            services.Configure<IpRateLimitOptions>(options =>
+            {
+                options.EnableEndpointRateLimiting = true;
+                options.StackBlockedRequests = true;
+                options.HttpStatusCode =429;
+                options.RealIpHeader = "X-real-ip";
+                options.GeneralRules = new List<RateLimitRule>
+                {
+                    new RateLimitRule
+                    {
+                        Endpoint = "*",
+                        Period = "10s",
+                        Limit = 90
+                    }
+                };
+            });
+        }
     }

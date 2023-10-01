@@ -6,5 +6,6 @@ namespace Dominio.Entities;
         public string Nombre { get; set; }
         public int IdDepartamentoFk {get; set;}
         public Departamento Departamento {get; set;}
+
         public ICollection<Direccion> Direcciones {get; set;}
     }

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiFarmacia.Dtos;
+using Aplicacion.UnitOfWork;
+using AutoMapper;
 using Dominio.Entities;
 using Dominio.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -13,45 +16,67 @@ namespace ApiFarmacia.Controllers
     public class ProductoProveedorController : BaseApiController
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly IMapper mapper;
 
-        public ProductoProveedorController(IUnitOfWork unitOfWork)
+        public ProductoProveedorController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            this.unitOfWork = unitOfWork;
+            this.unitOfWork =unitOfWork;
+            this.mapper =mapper;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<IEnumerable<ProductoProveedor>>> Get()
+        public async Task<ActionResult<IEnumerable<ProductoProveedorDto>>> Get()
         {
             var llamado = await unitOfWork.ProductoProveedores.GetAllAsync();
-            return Ok(llamado);
+            return mapper.Map<List<ProductoProveedorDto>>(llamado);
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        public async Task<ActionResult> Get(int id)
+        public async Task<ActionResult<ProductoProveedorDto>> Get(int id)
         {
             var llamado = await unitOfWork.ProductoProveedores.GetByIdAsync(id);
-            return Ok(llamado);
+            if (llamado == null){
+                return NotFound();
+            }
+            return mapper.Map<ProductoProveedorDto>(llamado);
+        }
+
+        //Listar los proveedores con su informacion de contacto en medicamentos
+
+        [HttpGet("listarproveedor")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+
+        public async Task<ActionResult<IEnumerable<ProductoProveedorDto>>> Get1()
+        {
+            var productos = await unitOfWork.ProductoProveedores.GetContactSupplier();
+            if(productos == null)
+            {
+                return BadRequest("no se encontrado");
+            }
+            return mapper.Map<List<ProductoProveedorDto>>(productos);
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<ProductoProveedor>> Post(ProductoProveedor productoProveedor)
+        public async Task<ActionResult<ProductoProveedor>> Post(ProductoProveedorDto productoProveedorDto)
         {
-            this.unitOfWork.ProductoProveedores.Add(productoProveedor);
+            var llamado = this.mapper.Map<ProductoProveedor>(productoProveedorDto);
+            this.unitOfWork.ProductoProveedores.Add(llamado);
             await unitOfWork.SaveAsync();
-            if (productoProveedor == null)
+            if (llamado == null)
             {
                 return BadRequest();
             }
-            return CreatedAtAction(nameof(Post), new { id = productoProveedor.Id }, productoProveedor);
+            return CreatedAtAction(nameof(Post), new { id = productoProveedorDto.Id }, productoProveedorDto);
         }
 
         [HttpPut("{id}")]
@@ -59,13 +84,14 @@ namespace ApiFarmacia.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<ProductoProveedor>> Put(int id,[FromBody] ProductoProveedor productoProveedor)
+        public async Task<ActionResult<ProductoProveedorDto>> Put(int id,[FromBody] ProductoProveedorDto productoProveedorDto)
         {
-            if(productoProveedor == null)
+            if(productoProveedorDto == null)
             return NotFound();
-            unitOfWork.ProductoProveedores.Update(productoProveedor);
+            var productoProvee = mapper.Map<ProductoProveedor>(productoProveedorDto);
+            unitOfWork.ProductoProveedores.Update(productoProvee);
             await unitOfWork.SaveAsync();
-            return productoProveedor;
+            return productoProveedorDto;
         }
 
         [HttpDelete("{id}")]
@@ -73,13 +99,13 @@ namespace ApiFarmacia.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         { 
             var llamado = await unitOfWork.ProductoProveedores.GetByIdAsync(id);
             if (llamado == null){
                 return NotFound();
             }
-            unitOfWork.Productos.Remove(llamado);
+            unitOfWork.ProductoProveedores.Remove(llamado);
             await unitOfWork.SaveAsync();
             return NoContent();
         }

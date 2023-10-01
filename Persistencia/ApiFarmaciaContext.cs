@@ -34,10 +34,10 @@ namespace Persistencia;
         public DbSet<User> Users {get; set;}
         public DbSet<UserRol> UserRols {get; set;}
         public DbSet<RefreshToken> RefreshTokens {get; set;}
-        public DbSet<MovimientoInventario> ResponsableCollection {get; set;}
-        public DbSet<MovimientoInventario> ReceptorCollection {get; set;}
         public DbSet<RecetaMedica> PacienteCollection {get; set;}
         public DbSet<RecetaMedica> DoctorCollection {get; set;}
+        public DbSet<MovimientoInventario> Vendedores {get; set;}
+        public DbSet<MovimientoInventario> Clientes {get; set;}
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

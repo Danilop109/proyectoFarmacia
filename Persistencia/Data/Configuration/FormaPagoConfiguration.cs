@@ -15,7 +15,6 @@ namespace Persistencia.Data.Configuration
             .HasColumnType("varchar")
             .IsRequired()
             .HasMaxLength(100);
-
             
         }
     }
