@@ -22,9 +22,7 @@ namespace Persistencia.Data.Configuration
             .HasColumnType("double")
             .IsRequired();
 
-            builder.HasOne(p => p.Invintario)
-            .WithMany(p => p.DetalleMovInventarios)
-            .HasForeignKey(p => p.IdInventarioFk);
+
 
             builder.HasOne(p => p.MovimientoInventario)
             .WithMany(p => p.DetalleMovInventarios)

@@ -24,6 +24,7 @@ namespace Aplicacion.Repositorio
             return await _context.RecetaMedicas
             .Include(p => p.DoctorFk)
             .Include(p => p.PacienteFk)
+            .Include(p => p.MovimientoInventario)
             .ToListAsync();
         }
 
@@ -32,6 +33,7 @@ namespace Aplicacion.Repositorio
             return await _context.RecetaMedicas
             .Include(p => p.DoctorFk)
             .Include(p => p.PacienteFk)
+            .Include(p => p.MovimientoInventario)
             .FirstOrDefaultAsync(p => p.Id == id);
         }
 

@@ -3,5 +3,7 @@ namespace Dominio.Entities;
     public class FormaPago : BaseEntity
     {
         public string Nombre {get; set;}   
-        public ICollection<MovimientoInventario> MovimientoInventarios {get; set;}
+
+        public int IdMovimientoInventarioFk {get; set;}
+        public MovimientoInventario MovimientoInventario{get; set;}
     }
