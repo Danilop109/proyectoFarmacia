@@ -32,7 +32,7 @@ namespace Aplicacion.Repositorio
             .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        //Obtener todos los medicamentos con menos de (x) unidades en stock
+        //CONSULTA 1: Obtener todos los medicamentos con menos de (x) unidades en stock
 
         public async Task<IEnumerable<Inventario>> ObtenerMenosStockAsync(int cantidad)
         {
