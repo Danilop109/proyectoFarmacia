@@ -7,12 +7,27 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Persistencia.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateMig : Migration
+    public partial class InitialCreateMig : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "formaPago",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Nombre = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_formaPago", x => x.Id);
+                })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
@@ -106,6 +121,21 @@ namespace Persistencia.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "tipoMovimientoInventario",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    nombre = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tipoMovimientoInventario", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "tipoPersona",
                 columns: table => new
                 {
@@ -143,6 +173,68 @@ namespace Persistencia.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "inventario",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    nombre = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    stock = table.Column<int>(type: "int", nullable: false),
+                    IdPresentacionFk = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_inventario", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_inventario_Presentacion_IdPresentacionFk",
+                        column: x => x.IdPresentacionFk,
+                        principalTable: "Presentacion",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "persona",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Nombre = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Documento = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FechaRegistro = table.Column<DateTime>(type: "DateTime", nullable: false),
+                    IdTipoPersonaFk = table.Column<int>(type: "int", nullable: false),
+                    IdTipoDocumentoFk = table.Column<int>(type: "int", nullable: false),
+                    IdRolFk = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_persona", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_persona_Rol_IdRolFk",
+                        column: x => x.IdRolFk,
+                        principalTable: "Rol",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_persona_tipoDocumento_IdTipoDocumentoFk",
+                        column: x => x.IdTipoDocumentoFk,
+                        principalTable: "tipoDocumento",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_persona_tipoPersona_IdTipoPersonaFk",
+                        column: x => x.IdTipoPersonaFk,
+                        principalTable: "tipoPersona",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "ciudad",
                 columns: table => new
                 {
@@ -159,6 +251,36 @@ namespace Persistencia.Data.Migrations
                         name: "FK_ciudad_departamento_IdDepartamentoFk",
                         column: x => x.IdDepartamentoFk,
                         principalTable: "departamento",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Producto",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Precio = table.Column<double>(type: "double", nullable: false),
+                    Cantidad = table.Column<int>(type: "int", maxLength: 3, nullable: false),
+                    fechaCaducidad = table.Column<DateTime>(type: "DateTime", nullable: false),
+                    IdMarcaFk = table.Column<int>(type: "int", nullable: false),
+                    IdInventarioFk = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Producto", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Producto_inventario_IdInventarioFk",
+                        column: x => x.IdInventarioFk,
+                        principalTable: "inventario",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Producto_marca_IdMarcaFk",
+                        column: x => x.IdMarcaFk,
+                        principalTable: "marca",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -186,52 +308,74 @@ namespace Persistencia.Data.Migrations
                         principalTable: "TipoContacto",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "DetalleMovInventario",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    cantidad = table.Column<int>(type: "int", maxLength: 3, nullable: false),
-                    precio = table.Column<double>(type: "double", nullable: false),
-                    IdMovimientoInvFk = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DetalleMovInventario", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "inventario",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    nombre = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    stock = table.Column<int>(type: "int", nullable: false),
-                    stockMin = table.Column<int>(type: "int", nullable: false),
-                    stockMax = table.Column<int>(type: "int", nullable: false),
-                    IdPresentacionFk = table.Column<int>(type: "int", nullable: false),
-                    IdDetalleMovInventarioFk = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_inventario", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_inventario_DetalleMovInventario_IdDetalleMovInventarioFk",
-                        column: x => x.IdDetalleMovInventarioFk,
-                        principalTable: "DetalleMovInventario",
+                        name: "FK_contactoPersona_persona_IdPersonaFk",
+                        column: x => x.IdPersonaFk,
+                        principalTable: "persona",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "RecetaMedica",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    FechaEmicion = table.Column<DateTime>(type: "DateTime", nullable: false),
+                    FechaCaducidad = table.Column<DateTime>(type: "DateTime", nullable: false),
+                    detalle = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IdDoctorFk = table.Column<int>(type: "int", nullable: false),
+                    IdPacienteFk = table.Column<int>(type: "int", nullable: false),
+                    InventarioId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecetaMedica", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RecetaMedica_inventario_InventarioId",
+                        column: x => x.InventarioId,
+                        principalTable: "inventario",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_inventario_Presentacion_IdPresentacionFk",
-                        column: x => x.IdPresentacionFk,
-                        principalTable: "Presentacion",
+                        name: "FK_RecetaMedica_persona_IdDoctorFk",
+                        column: x => x.IdDoctorFk,
+                        principalTable: "persona",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RecetaMedica_persona_IdPacienteFk",
+                        column: x => x.IdPacienteFk,
+                        principalTable: "persona",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "user",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Username = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    email = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Password = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IdPersonaFk = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_user", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_user_persona_IdPersonaFk",
+                        column: x => x.IdPersonaFk,
+                        principalTable: "persona",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -257,172 +401,8 @@ namespace Persistencia.Data.Migrations
                         principalTable: "ciudad",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "formaPago",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nombre = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IdMovimientoInventarioFk = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_formaPago", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "medicamentoRecetado",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    descripcion = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IdRecetaMedicaFk = table.Column<int>(type: "int", nullable: false),
-                    IdInventarioFk = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_medicamentoRecetado", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_medicamentoRecetado_inventario_IdInventarioFk",
-                        column: x => x.IdInventarioFk,
-                        principalTable: "inventario",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "movimientoInventario",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    fechaVencimiento = table.Column<DateTime>(type: "DateTime", nullable: false),
-                    fechaMovimiento = table.Column<DateTime>(type: "DateTime", nullable: false),
-                    PersonaId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_movimientoInventario", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "persona",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nombre = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Apellido = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Documento = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    FechaRegistro = table.Column<DateTime>(type: "DateTime", nullable: false),
-                    IdTipoPersonaFk = table.Column<int>(type: "int", nullable: false),
-                    IdTipoDocumentoFk = table.Column<int>(type: "int", nullable: false),
-                    IdRolFk = table.Column<int>(type: "int", nullable: false),
-                    IdMovimientoInventarioFk = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_persona", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_persona_Rol_IdRolFk",
-                        column: x => x.IdRolFk,
-                        principalTable: "Rol",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_persona_movimientoInventario_IdMovimientoInventarioFk",
-                        column: x => x.IdMovimientoInventarioFk,
-                        principalTable: "movimientoInventario",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_persona_tipoDocumento_IdTipoDocumentoFk",
-                        column: x => x.IdTipoDocumentoFk,
-                        principalTable: "tipoDocumento",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_persona_tipoPersona_IdTipoPersonaFk",
-                        column: x => x.IdTipoPersonaFk,
-                        principalTable: "tipoPersona",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "tipoMovimientoInventario",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    nombre = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IdMovimientoInventarioFk = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_tipoMovimientoInventario", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_tipoMovimientoInventario_movimientoInventario_IdMovimientoIn~",
-                        column: x => x.IdMovimientoInventarioFk,
-                        principalTable: "movimientoInventario",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Producto",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    NombreProducto = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Precio = table.Column<double>(type: "double", nullable: false),
-                    Cantidad = table.Column<int>(type: "int", maxLength: 3, nullable: false),
-                    fechaCaducidad = table.Column<DateTime>(type: "DateTime", nullable: false),
-                    IdMarcaFk = table.Column<int>(type: "int", nullable: false),
-                    IdInventarioFk = table.Column<int>(type: "int", nullable: false),
-                    IdPersonaFk = table.Column<int>(type: "int", nullable: false),
-                    MovimientoInventarioId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Producto", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Producto_inventario_IdInventarioFk",
-                        column: x => x.IdInventarioFk,
-                        principalTable: "inventario",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Producto_marca_IdMarcaFk",
-                        column: x => x.IdMarcaFk,
-                        principalTable: "marca",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Producto_movimientoInventario_MovimientoInventarioId",
-                        column: x => x.MovimientoInventarioId,
-                        principalTable: "movimientoInventario",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Producto_persona_IdPersonaFk",
+                        name: "FK_direccion_persona_IdPersonaFk",
                         column: x => x.IdPersonaFk,
                         principalTable: "persona",
                         principalColumn: "Id",
@@ -431,70 +411,24 @@ namespace Persistencia.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "RecetaMedica",
+                name: "PersonaProducto",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    FechaEmicion = table.Column<DateTime>(type: "DateTime", nullable: false),
-                    FechaCaducidad = table.Column<DateTime>(type: "DateTime", nullable: false),
-                    detalle = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IdDoctorFk = table.Column<int>(type: "int", nullable: false),
-                    IdPacienteFk = table.Column<int>(type: "int", nullable: false),
-                    InventarioId = table.Column<int>(type: "int", nullable: false),
-                    IdMovimientoInventarioFk = table.Column<int>(type: "int", nullable: false)
+                    PersonasId = table.Column<int>(type: "int", nullable: false),
+                    ProductosId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RecetaMedica", x => x.Id);
+                    table.PrimaryKey("PK_PersonaProducto", x => new { x.PersonasId, x.ProductosId });
                     table.ForeignKey(
-                        name: "FK_RecetaMedica_inventario_InventarioId",
-                        column: x => x.InventarioId,
-                        principalTable: "inventario",
+                        name: "FK_PersonaProducto_Producto_ProductosId",
+                        column: x => x.ProductosId,
+                        principalTable: "Producto",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RecetaMedica_movimientoInventario_IdMovimientoInventarioFk",
-                        column: x => x.IdMovimientoInventarioFk,
-                        principalTable: "movimientoInventario",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RecetaMedica_persona_IdDoctorFk",
-                        column: x => x.IdDoctorFk,
-                        principalTable: "persona",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RecetaMedica_persona_IdPacienteFk",
-                        column: x => x.IdPacienteFk,
-                        principalTable: "persona",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "user",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nombreuser = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    email = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Password = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IdPersonaFk = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_user", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_user_persona_IdPersonaFk",
-                        column: x => x.IdPersonaFk,
+                        name: "FK_PersonaProducto_persona_PersonasId",
+                        column: x => x.PersonasId,
                         principalTable: "persona",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -523,6 +457,98 @@ namespace Persistencia.Data.Migrations
                         name: "FK_productoProveedor_persona_IdPersonaFk",
                         column: x => x.IdPersonaFk,
                         principalTable: "persona",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "medicamentoRecetado",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    nombreMedicamentoRecetado = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IdRecetaMedicaFk = table.Column<int>(type: "int", nullable: false),
+                    IdInventarioFk = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_medicamentoRecetado", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_medicamentoRecetado_RecetaMedica_IdRecetaMedicaFk",
+                        column: x => x.IdRecetaMedicaFk,
+                        principalTable: "RecetaMedica",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_medicamentoRecetado_inventario_IdInventarioFk",
+                        column: x => x.IdInventarioFk,
+                        principalTable: "inventario",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "movimientoInventario",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    fechaMovimiento = table.Column<DateTime>(type: "DateTime", nullable: false),
+                    fechaVencimiento = table.Column<DateTime>(type: "DateTime", nullable: false),
+                    IdTipoMovimientoInventarioFk = table.Column<int>(type: "int", nullable: false),
+                    IdVendedorFk = table.Column<int>(type: "int", nullable: false),
+                    IdClienteFk = table.Column<int>(type: "int", nullable: false),
+                    IdRecetaMedicaFk = table.Column<int>(type: "int", nullable: false),
+                    IdInventarioFk = table.Column<int>(type: "int", nullable: false),
+                    IdFormaPagoFk = table.Column<int>(type: "int", nullable: false),
+                    RecetaMedicaId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_movimientoInventario", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_movimientoInventario_RecetaMedica_IdRecetaMedicaFk",
+                        column: x => x.IdRecetaMedicaFk,
+                        principalTable: "RecetaMedica",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_movimientoInventario_RecetaMedica_RecetaMedicaId",
+                        column: x => x.RecetaMedicaId,
+                        principalTable: "RecetaMedica",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_movimientoInventario_formaPago_IdFormaPagoFk",
+                        column: x => x.IdFormaPagoFk,
+                        principalTable: "formaPago",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_movimientoInventario_inventario_IdInventarioFk",
+                        column: x => x.IdInventarioFk,
+                        principalTable: "inventario",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_movimientoInventario_persona_IdClienteFk",
+                        column: x => x.IdClienteFk,
+                        principalTable: "persona",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_movimientoInventario_persona_IdVendedorFk",
+                        column: x => x.IdVendedorFk,
+                        principalTable: "persona",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_movimientoInventario_tipoMovimientoInventario_IdTipoMovimien~",
+                        column: x => x.IdTipoMovimientoInventarioFk,
+                        principalTable: "tipoMovimientoInventario",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -578,6 +604,35 @@ namespace Persistencia.Data.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "DetalleMovInventario",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    cantidad = table.Column<int>(type: "int", maxLength: 3, nullable: false),
+                    precio = table.Column<double>(type: "double", nullable: false),
+                    IdInventarioFk = table.Column<int>(type: "int", nullable: false),
+                    IdMovimientoInvFk = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DetalleMovInventario", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DetalleMovInventario_inventario_IdInventarioFk",
+                        column: x => x.IdInventarioFk,
+                        principalTable: "inventario",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DetalleMovInventario_movimientoInventario_IdMovimientoInvFk",
+                        column: x => x.IdMovimientoInvFk,
+                        principalTable: "movimientoInventario",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_ciudad_IdDepartamentoFk",
                 table: "ciudad",
@@ -599,6 +654,11 @@ namespace Persistencia.Data.Migrations
                 column: "IdPaisFk");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DetalleMovInventario_IdInventarioFk",
+                table: "DetalleMovInventario",
+                column: "IdInventarioFk");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DetalleMovInventario_IdMovimientoInvFk",
                 table: "DetalleMovInventario",
                 column: "IdMovimientoInvFk");
@@ -612,16 +672,6 @@ namespace Persistencia.Data.Migrations
                 name: "IX_direccion_IdPersonaFk",
                 table: "direccion",
                 column: "IdPersonaFk");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_formaPago_IdMovimientoInventarioFk",
-                table: "formaPago",
-                column: "IdMovimientoInventarioFk");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_inventario_IdDetalleMovInventarioFk",
-                table: "inventario",
-                column: "IdDetalleMovInventarioFk");
 
             migrationBuilder.CreateIndex(
                 name: "IX_inventario_IdPresentacionFk",
@@ -639,14 +689,40 @@ namespace Persistencia.Data.Migrations
                 column: "IdRecetaMedicaFk");
 
             migrationBuilder.CreateIndex(
-                name: "IX_movimientoInventario_PersonaId",
+                name: "IX_movimientoInventario_IdClienteFk",
                 table: "movimientoInventario",
-                column: "PersonaId");
+                column: "IdClienteFk");
 
             migrationBuilder.CreateIndex(
-                name: "IX_persona_IdMovimientoInventarioFk",
-                table: "persona",
-                column: "IdMovimientoInventarioFk");
+                name: "IX_movimientoInventario_IdFormaPagoFk",
+                table: "movimientoInventario",
+                column: "IdFormaPagoFk");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_movimientoInventario_IdInventarioFk",
+                table: "movimientoInventario",
+                column: "IdInventarioFk");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_movimientoInventario_IdRecetaMedicaFk",
+                table: "movimientoInventario",
+                column: "IdRecetaMedicaFk",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_movimientoInventario_IdTipoMovimientoInventarioFk",
+                table: "movimientoInventario",
+                column: "IdTipoMovimientoInventarioFk");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_movimientoInventario_IdVendedorFk",
+                table: "movimientoInventario",
+                column: "IdVendedorFk");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_movimientoInventario_RecetaMedicaId",
+                table: "movimientoInventario",
+                column: "RecetaMedicaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_persona_IdRolFk",
@@ -664,6 +740,11 @@ namespace Persistencia.Data.Migrations
                 column: "IdTipoPersonaFk");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PersonaProducto_ProductosId",
+                table: "PersonaProducto",
+                column: "ProductosId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Producto_IdInventarioFk",
                 table: "Producto",
                 column: "IdInventarioFk");
@@ -672,16 +753,6 @@ namespace Persistencia.Data.Migrations
                 name: "IX_Producto_IdMarcaFk",
                 table: "Producto",
                 column: "IdMarcaFk");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Producto_IdPersonaFk",
-                table: "Producto",
-                column: "IdPersonaFk");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Producto_MovimientoInventarioId",
-                table: "Producto",
-                column: "MovimientoInventarioId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_productoProveedor_IdPersonaFk",
@@ -699,11 +770,6 @@ namespace Persistencia.Data.Migrations
                 column: "IdDoctorFk");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RecetaMedica_IdMovimientoInventarioFk",
-                table: "RecetaMedica",
-                column: "IdMovimientoInventarioFk");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RecetaMedica_IdPacienteFk",
                 table: "RecetaMedica",
                 column: "IdPacienteFk");
@@ -719,11 +785,6 @@ namespace Persistencia.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tipoMovimientoInventario_IdMovimientoInventarioFk",
-                table: "tipoMovimientoInventario",
-                column: "IdMovimientoInventarioFk");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_user_IdPersonaFk",
                 table: "user",
                 column: "IdPersonaFk",
@@ -733,73 +794,25 @@ namespace Persistencia.Data.Migrations
                 name: "IX_userRol_IdUserFk",
                 table: "userRol",
                 column: "IdUserFk");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_contactoPersona_persona_IdPersonaFk",
-                table: "contactoPersona",
-                column: "IdPersonaFk",
-                principalTable: "persona",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_DetalleMovInventario_movimientoInventario_IdMovimientoInvFk",
-                table: "DetalleMovInventario",
-                column: "IdMovimientoInvFk",
-                principalTable: "movimientoInventario",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_direccion_persona_IdPersonaFk",
-                table: "direccion",
-                column: "IdPersonaFk",
-                principalTable: "persona",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_formaPago_movimientoInventario_IdMovimientoInventarioFk",
-                table: "formaPago",
-                column: "IdMovimientoInventarioFk",
-                principalTable: "movimientoInventario",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_medicamentoRecetado_RecetaMedica_IdRecetaMedicaFk",
-                table: "medicamentoRecetado",
-                column: "IdRecetaMedicaFk",
-                principalTable: "RecetaMedica",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_movimientoInventario_persona_PersonaId",
-                table: "movimientoInventario",
-                column: "PersonaId",
-                principalTable: "persona",
-                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_movimientoInventario_persona_PersonaId",
-                table: "movimientoInventario");
-
             migrationBuilder.DropTable(
                 name: "contactoPersona");
+
+            migrationBuilder.DropTable(
+                name: "DetalleMovInventario");
 
             migrationBuilder.DropTable(
                 name: "direccion");
 
             migrationBuilder.DropTable(
-                name: "formaPago");
+                name: "medicamentoRecetado");
 
             migrationBuilder.DropTable(
-                name: "medicamentoRecetado");
+                name: "PersonaProducto");
 
             migrationBuilder.DropTable(
                 name: "productoProveedor");
@@ -808,19 +821,16 @@ namespace Persistencia.Data.Migrations
                 name: "refreshToken");
 
             migrationBuilder.DropTable(
-                name: "tipoMovimientoInventario");
-
-            migrationBuilder.DropTable(
                 name: "userRol");
 
             migrationBuilder.DropTable(
                 name: "TipoContacto");
 
             migrationBuilder.DropTable(
-                name: "ciudad");
+                name: "movimientoInventario");
 
             migrationBuilder.DropTable(
-                name: "RecetaMedica");
+                name: "ciudad");
 
             migrationBuilder.DropTable(
                 name: "Producto");
@@ -829,31 +839,34 @@ namespace Persistencia.Data.Migrations
                 name: "user");
 
             migrationBuilder.DropTable(
-                name: "departamento");
+                name: "RecetaMedica");
 
             migrationBuilder.DropTable(
-                name: "inventario");
+                name: "formaPago");
+
+            migrationBuilder.DropTable(
+                name: "tipoMovimientoInventario");
+
+            migrationBuilder.DropTable(
+                name: "departamento");
 
             migrationBuilder.DropTable(
                 name: "marca");
 
             migrationBuilder.DropTable(
-                name: "pais");
-
-            migrationBuilder.DropTable(
-                name: "DetalleMovInventario");
-
-            migrationBuilder.DropTable(
-                name: "Presentacion");
+                name: "inventario");
 
             migrationBuilder.DropTable(
                 name: "persona");
 
             migrationBuilder.DropTable(
-                name: "Rol");
+                name: "pais");
 
             migrationBuilder.DropTable(
-                name: "movimientoInventario");
+                name: "Presentacion");
+
+            migrationBuilder.DropTable(
+                name: "Rol");
 
             migrationBuilder.DropTable(
                 name: "tipoDocumento");

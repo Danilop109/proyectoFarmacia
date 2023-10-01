@@ -20,12 +20,6 @@ namespace Persistencia.Data.Configuration
             .IsRequired()
             .HasMaxLength(100);
 
-            builder.Property(n => n.Apellido)
-            .HasColumnName("Apellido")
-            .HasColumnType("varchar")
-            .IsRequired()
-            .HasMaxLength(100);
-
             builder.Property(n => n.Documento)
             .HasColumnName("Documento")
             .HasColumnType("varchar")
@@ -49,15 +43,9 @@ namespace Persistencia.Data.Configuration
             .WithMany(t => t.Personas)
             .HasForeignKey(t => t.IdRolFk);
 
-
-
             builder.HasOne(u => u.User)
             .WithOne(u => u.Persona)
             .HasForeignKey<User>(u => u.IdPersonaFk);
-
-            builder.HasOne(mi => mi.MovimientoInventario)
-            .WithMany(p => p.Personas)
-            .HasForeignKey(mi => mi.IdMovimientoInventarioFk);
 
         }
     }

@@ -30,11 +30,11 @@ namespace ApiFarmacia.Services
         {
             var user = new User
             {
-                Nombre = registerDto.Nombre
+                Username = registerDto.Username
             };
             user.Password = _passwordHasher.HashPassword(user, registerDto.Password); //contraseña ncriptada
             var existingUser = _unitOfWork.Users
-            .Find(u => u.Nombre.ToLower() == registerDto.Nombre.ToLower())
+            .Find(u => u.Username.ToLower() == registerDto.Username.ToLower())
             .FirstOrDefault();
 
             if (existingUser == null)
@@ -48,7 +48,7 @@ namespace ApiFarmacia.Services
                     _unitOfWork.Users.Add(user);
                     await _unitOfWork.SaveAsync();
 
-                    return $"User {registerDto.Nombre} has been registered successfully";
+                    return $"User {registerDto.Username} has been registered successfully";
                 }
                 catch (Exception ex)
                 {
@@ -58,7 +58,7 @@ namespace ApiFarmacia.Services
             }
             else
             {
-                return $"User {registerDto.Nombre} already registered.";
+                return $"User {registerDto.Username} already registered.";
             }
         }
 
@@ -66,12 +66,12 @@ namespace ApiFarmacia.Services
         {
             DataUserDto dataUserDto = new DataUserDto();
             var user = await _unitOfWork.Users
-                        .GetByUsernameAsync(model.Nombre);
+                        .GetByUsernameAsync(model.Username);
 
             if (user == null)
             {
                 dataUserDto.IsAuthenticated = false;
-                dataUserDto.Message = $"User does not exist with username {model.Nombre}.";
+                dataUserDto.Message = $"User does not exist with username {model.Username}.";
                 return dataUserDto;
             }
 
@@ -82,7 +82,7 @@ namespace ApiFarmacia.Services
                 dataUserDto.IsAuthenticated = true;
                 JwtSecurityToken jwtSecurityToken = CreateJwtToken(user);
                 dataUserDto.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-                dataUserDto.Nombre = user.Nombre;
+                dataUserDto.Username = user.Username;
                 dataUserDto.Roles = user.Rols
                                                 .Select(u => u.Nombre)
                                                 .ToList();
@@ -106,7 +106,7 @@ namespace ApiFarmacia.Services
                 return dataUserDto;
             }
             dataUserDto.IsAuthenticated = false;
-            dataUserDto.Message = $"Credenciales incorrectas para el usuario {user.Nombre}.";
+            dataUserDto.Message = $"Credenciales incorrectas para el usuario {user.Username}.";
             return dataUserDto;
         }
 
@@ -180,7 +180,7 @@ namespace ApiFarmacia.Services
             dataUserDto.IsAuthenticated = true;
             JwtSecurityToken jwtSecurityToken = CreateJwtToken(usuario);
             dataUserDto.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-            dataUserDto.Nombre = usuario.Nombre;
+            dataUserDto.Username = usuario.Username;
             dataUserDto.Roles = usuario.Rols
                                             .Select(u => u.Nombre)
                                             .ToList();
@@ -214,7 +214,7 @@ namespace ApiFarmacia.Services
             }
             var claims = new[]
             {
-                                new Claim(JwtRegisteredClaimNames.Sub, usuario.Nombre),
+                                new Claim(JwtRegisteredClaimNames.Sub, usuario.Username),
                                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 /*                                 new Claim(JwtRegisteredClaimNames.Email, usuario.Email),
  */                                new Claim("uid", usuario.Id.ToString())

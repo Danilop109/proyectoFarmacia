@@ -10,8 +10,8 @@ namespace Persistencia.Data.Configuration
         {
             builder.ToTable("medicamentoRecetado");
 
-            builder.Property(p => p.Descripcion)
-            .HasColumnName("descripcion")
+            builder.Property(p => p.NombreMedicamento)
+            .HasColumnName("nombreMedicamentoRecetado")
             .HasColumnType("varchar")
             .IsRequired()
             .HasMaxLength(200);

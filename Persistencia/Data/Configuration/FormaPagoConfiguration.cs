@@ -15,12 +15,6 @@ namespace Persistencia.Data.Configuration
             .HasColumnType("varchar")
             .IsRequired()
             .HasMaxLength(100);
-
-
-            builder.HasOne(p => p.MovimientoInventario)
-            .WithMany(p => p.FormaPagos)
-            .HasForeignKey(p => p.IdMovimientoInventarioFk);
-
             
         }
     }

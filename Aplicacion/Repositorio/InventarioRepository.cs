@@ -22,7 +22,6 @@ namespace Aplicacion.Repositorio
         {
             return await _context.Inventarios
             .Include(p => p.Presentacion)
-            .Include(p => p.DetalleMovInventario)
             .ToListAsync();
         }
 
@@ -30,13 +29,8 @@ namespace Aplicacion.Repositorio
         {
             return await _context.Inventarios
             .Include(p => p.Presentacion )
-            .Include(p => p.DetalleMovInventario)
             .FirstOrDefaultAsync(p => p.Id == id);
         }
-
-
-
-
 
         //Obtener todos los medicamentos con menos de (x) unidades en stock
 
