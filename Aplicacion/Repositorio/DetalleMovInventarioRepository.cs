@@ -16,7 +16,6 @@ namespace Aplicacion.Repositorio
         public override async Task<IEnumerable<DetalleMovInventario>> GetAllAsync()
         {
             return await _context.DetalleMovInventarios
-            .Include(p => p.Invintario)
             .Include(p => p.MovimientoInventario)
             .ToListAsync();
         }
@@ -24,7 +23,7 @@ namespace Aplicacion.Repositorio
         public override async Task<DetalleMovInventario> GetByIdAsync(int id )
         {
             return await _context.DetalleMovInventarios
-            .Include(p => p.Invintario)
+            .Include(p => p.MovimientoInventario)
             .FirstOrDefaultAsync(p => p.Id == id);
         }
     }

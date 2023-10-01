@@ -8,10 +8,10 @@ using AutoMapper;
 using Dominio.Entities;
 using Dominio.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+
 
 namespace ApiFarmacia.Controllers;
-    public class FormaPagoController : Controller
+    public class FormaPagoController : BaseApiController
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;

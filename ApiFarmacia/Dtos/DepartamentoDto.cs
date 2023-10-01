@@ -9,7 +9,6 @@ namespace ApiFarmacia.Dtos
     {
         public int Id {get; set;}
         public string Nombre {get; set;}
-        public int IdPaisFk { get; set; }
-        public PaisDto PaisDto {get;set;}
+        public PaisDto Pais {get;set;}
     }
 }

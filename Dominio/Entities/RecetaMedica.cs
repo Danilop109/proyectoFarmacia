@@ -12,6 +12,7 @@ namespace Dominio.Entities;
         public Persona PacienteFk {get;set;}
         public int InventarioId {get; set;}
         public Inventario InventarioFk {get; set;}
-        public virtual MovimientoInventario MovimientoInventario { get; set; }
+        public int IdMovimientoInventarioFk {get; set;}
+        public MovimientoInventario MovimientoInventario {get; set;}
         public ICollection<MedicamentoRecetado> MedicamentoRecetados {get; set;}
     }

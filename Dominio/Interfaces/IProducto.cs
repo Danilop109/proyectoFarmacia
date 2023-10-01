@@ -6,6 +6,7 @@ namespace Dominio.Interfaces
       Task<IEnumerable<Producto>> GetMediExpireBeforeDate( DateTime expireDate);
       Task<IEnumerable<Producto>> MedicamentosCompradosPorProveedor(string nombre);
       Task<Producto> MediMoreExpensive();
+      Task<IEnumerable<Producto>> GetProductosSale(DateTime fecha);
     }
     
 }

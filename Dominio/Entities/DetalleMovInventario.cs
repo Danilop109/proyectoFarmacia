@@ -8,8 +8,7 @@ namespace Dominio.Entities;
     {
         public int Cantidad {get; set; }
         public double Precio {get; set;}
-        public int IdInventarioFk {get; set; }
-        public Inventario Invintario {get; set; }
+        public ICollection<Inventario> Inventarios {get; set;}
         public int IdMovimientoInvFk {get; set; }
         public MovimientoInventario MovimientoInventario {get; set;}
     }

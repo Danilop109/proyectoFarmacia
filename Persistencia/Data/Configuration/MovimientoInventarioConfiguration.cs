@@ -21,23 +21,6 @@ namespace Persistencia.Data.Configuration
             .HasColumnName("fechaVencimiento")
             .HasColumnType("DateTime")
             .IsRequired();
-
-            builder.HasOne(p => p.FormaPago)
-            .WithMany(p => p.MovimientoInventarios)
-            .HasForeignKey(p => p.IdFormaPagoFk);
-
-            builder.HasOne(p => p.TipoMovInventario)
-            .WithMany(p => p.MovimientoInventarios)
-            .HasForeignKey(p => p.IdTipoMovInventarioFk);
-
-            builder.HasOne(mi => mi.ResponsableFk)
-            .WithMany(p => p.ResponsableCollection)
-            .HasForeignKey(mi => mi.IdResponsableFk);
-
-            builder.HasOne(mi => mi.ReceptorFk)
-            .WithMany(p => p.ReceptorCollection)
-            .HasForeignKey(mi => mi.IdReceptorFk);
-
         }
 
 

@@ -49,31 +49,16 @@ namespace Persistencia.Data.Configuration
             .WithMany(t => t.Personas)
             .HasForeignKey(t => t.IdRolFk);
 
-            builder
-            .HasMany(p => p.Productos)
-            .WithMany(t => t.Personas)
-            .UsingEntity<ProductoProveedor>(
 
-                j => j
-                .HasOne(p => p.Producto)
-                .WithMany(p => p.ProductoProveedores)
-                .HasForeignKey(p=> p.IdProductoFk),
-
-                j => j
-                .HasOne(p => p.Proveedor)
-                .WithMany(p => p.ProductoProveedores)
-                .HasForeignKey(p=> p.IdProveedorFk),
-
-                j =>
-                {
-                    j.ToTable("productoProveedor");
-                    j.HasKey(t => new {t.IdProductoFk, t.IdProveedorFk});
-                }
-            );
 
             builder.HasOne(u => u.User)
             .WithOne(u => u.Persona)
             .HasForeignKey<User>(u => u.IdPersonaFk);
+
+            builder.HasOne(mi => mi.MovimientoInventario)
+            .WithMany(p => p.Personas)
+            .HasForeignKey(mi => mi.IdMovimientoInventarioFk);
+
         }
     }
 }

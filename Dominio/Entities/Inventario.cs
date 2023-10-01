@@ -9,7 +9,9 @@ namespace Dominio.Entities;
         public int StockMax {get; set;}
         public int IdPresentacionFk {get; set;}
         public Presentacion Presentacion {get; set;}
-        public ICollection<DetalleMovInventario> DetalleMovInventarios {get; set;}
+        
+        public int IdDetalleMovInventarioFk {get; set;}
+        public DetalleMovInventario DetalleMovInventario {get;set;}
         public ICollection<Producto> Productos {get; set;}
         public ICollection<MedicamentoRecetado> MedicamentoRecetados {get; set;}
         public ICollection<RecetaMedica> RecetaMedicas {get; set;}
