@@ -32,14 +32,22 @@ namespace Aplicacion.Repositorio
             .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        //Obtener todos los medicamentos con menos de (x) unidades en stock
+        //CONSULTA 1: Obtener todos los medicamentos con menos de (x) unidades en stock
 
         public async Task<IEnumerable<Inventario>> ObtenerMenosStockAsync(int cantidad)
+{
+    return await _context.Inventarios
+        .Where(p => p.Stock < cantidad)
+        .Select(p => new Inventario
         {
-            return await _context.Inventarios
-            .Where(p => p.Stock < cantidad)
-            .ToListAsync();
-        }
+            Id = p.Id,
+            Nombre = p.Nombre,
+            Stock = p.Stock,
+            // Agrega aquí los otros campos que desees seleccionar
+        })
+        .ToListAsync();
+}
+
 
 
     }
