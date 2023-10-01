@@ -18,6 +18,5 @@ namespace ApiFarmacia.Dtos
         public TipoMovInventarioDto TipoMovInventario {get; set;}
 
 
-        
     }
 }
