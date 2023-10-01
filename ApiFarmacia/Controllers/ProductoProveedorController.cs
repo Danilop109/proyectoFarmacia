@@ -58,7 +58,7 @@ namespace ApiFarmacia.Controllers
             var productos = await unitOfWork.ProductoProveedores.GetContactSupplier();
             if(productos == null)
             {
-                return BadRequest();
+                return BadRequest("no se encontrado");
             }
             return mapper.Map<List<ProductoProveedorDto>>(productos);
         }

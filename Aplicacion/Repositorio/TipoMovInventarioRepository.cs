@@ -21,12 +21,14 @@ namespace Aplicacion.Repositorio
         public override async Task<IEnumerable<TipoMovInventario>> GetAllAsync()
         {
             return await _context.TipoMovInventarios
+                .Include(p => p.MovimientoInventario)
                 .ToListAsync();
         }
 
         public override async Task<TipoMovInventario> GetByIdAsync(int id)
         {
             return await _context.TipoMovInventarios
+            .Include(p => p.MovimientoInventario)
             .FirstOrDefaultAsync(p => p.Id == id);
         }
     }

@@ -11,8 +11,8 @@ namespace ApiFarmacia.Dtos
         public int Id {get; set;}
         public DateTime FechaMovimiento {get; set;}
         public DateTime FechaVencimiento {get; set;}
-        public PersonaDto Responsable {get; set;}
-        public PersonaDto Receptor {get; set;}
+        public ProveedorDto ResponsableFk {get; set;}
+        public PersonaDto ReceptorFk {get; set;}
         public FormaPagoDto FormaPago {get; set;}
         public RecetaMedicaDto RecetaMedica {get; set;}
         public TipoMovInventarioDto TipoMovInventario {get; set;}

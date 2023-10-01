@@ -16,6 +16,11 @@ namespace Persistencia.Data.Configuration
             .IsRequired()
             .HasMaxLength(100);
 
+
+            builder.HasOne(p => p.MovimientoInventario)
+            .WithMany(p => p.FormaPagos)
+            .HasForeignKey(p => p.IdMovimientoInventarioFk);
+
             
         }
     }

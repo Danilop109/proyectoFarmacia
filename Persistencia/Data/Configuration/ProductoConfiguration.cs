@@ -44,6 +44,12 @@ namespace Persistencia.Data.Configuration
             .WithMany(m => m.Productos)
             .HasForeignKey(m=> m.IdInventarioFk);
 
+            builder.HasOne(p => p.Persona)
+            .WithMany(p => p.Productos)
+            .HasForeignKey(p => p.IdPersonaFk);
+
+            
+
         }
     }
 }

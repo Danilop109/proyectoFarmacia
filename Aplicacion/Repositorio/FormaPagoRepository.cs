@@ -17,12 +17,14 @@ namespace Aplicacion.Repositorio
         public override async Task<IEnumerable<FormaPago>> GetAllAsync()
         {
             return await _context.FormaPagos
+            .Include(p => p.MovimientoInventario)
             .ToListAsync();
         }
 
         public override async Task<FormaPago> GetByIdAsync(int id)
         {
             return await _context.FormaPagos
+            .Include(p => p.MovimientoInventario)
             .FirstOrDefaultAsync(p => p.Id == id);
         }
 
