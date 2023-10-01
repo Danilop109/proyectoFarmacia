@@ -62,19 +62,19 @@ namespace Aplicacion.Repositorio
             .FirstOrDefaultAsync();
         }
 
-            //Obtener el total de medicamentos vendidos en marzo de 2023.
-        public async Task<IEnumerable<Producto>> GetProductosSale(DateTime fecha)
-        {
-            return await (
-                from rm in _context.Productos
-                join mi in _context.TipoMovInventarios on rm.IdInventarioFk equals mi.Id
-                join i in _context.Productos on rm.Id equals i.IdInventarioFk
-                where mi.Id == 1
-                where i.Id == 3
-                where i.Nombre.ToLower() == "paracetamol"
-                select rm 
-            ).ToListAsync();
-        }
+        //Obtener el total de medicamentos vendidos en marzo de 2023.
+        //  public async Task<IEnumerable<Producto>> GetProductosSale(DateTime fecha)
+        //  {
+        //      return await (
+        //          from rm in _context.Productos
+        //          join mi in _context.TipoMovInventarios on rm.IdInventarioFk equals mi.Id
+        //          join i in _context.Productos on rm.Id equals i.IdInventarioFk
+        //          where mi.Id == 1
+        //          where i.Id == 3
+        //          where i.ToLower() == "paracetamol"
+        //          select rm 
+        //      ).ToListAsync();
+        //  }
 
         
 }

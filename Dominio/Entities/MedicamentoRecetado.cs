@@ -7,7 +7,7 @@ namespace Dominio.Entities
 {
     public class MedicamentoRecetado: BaseEntity
     {
-        public string Descripcion {get; set;}
+        public string NombreMedicamento {get; set;}
         public int IdRecetaMedicaFk { get; set; }
         public RecetaMedica RecetaMedica {get; set;}
         public int IdInventarioFk {get; set;}

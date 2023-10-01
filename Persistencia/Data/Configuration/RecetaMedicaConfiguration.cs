@@ -38,14 +38,9 @@ namespace Persistencia.Data.Configuration
             .WithMany(p=> p.DoctorCollection)
             .HasForeignKey(p => p.IdDoctorFk);
 
-            builder
-            .HasOne(p => p.InventarioFk)
-            .WithMany(p=> p.RecetaMedicas)
-            .HasForeignKey(p => p.InventarioId);
-
             builder.HasOne(mi => mi.MovimientoInventario)
-            .WithMany(p => p.RecetaMedicas)
-            .HasForeignKey(mi => mi.IdMovimientoInventarioFk);
+            .WithOne(p => p.RecetaMedica)
+            .HasForeignKey<MovimientoInventario>(mi => mi.IdRecetaMedicaFk);
 
         }
     }

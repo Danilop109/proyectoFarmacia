@@ -25,7 +25,6 @@ namespace Aplicacion.Repositorio
             .Include(p => p.TipoPersona)
             .Include(p => p.TipoDocumento)
             .Include(p => p.Rol)
-            .Include(p => p.MovimientoInventario)
             .ToListAsync();
         }
 
@@ -35,7 +34,6 @@ namespace Aplicacion.Repositorio
             .Include(p => p.TipoPersona)
             .Include(p => p.TipoDocumento)
             .Include(p => p.Rol)
-            .Include(p => p.MovimientoInventario)
             .FirstOrDefaultAsync(p => p.Id == id);
         }
 

@@ -79,19 +79,19 @@ namespace ApiFarmacia.Controllers;
             return  mapper.Map<ProductoDto>(caro);
         }
 
-        [HttpGet("medicamentosVendidos/{fecha}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        // [HttpGet("medicamentosVendidos/{fecha}")]
+        // [ProducesResponseType(StatusCodes.Status200OK)]
 
-        public async Task<ActionResult<ProductoDto>> GetProductSale(DateTime fecha)
-        {
-            var producto = await unitOfWork.Productos.GetProductosSale(fecha);
-            if(producto == null)
-            {
-                return BadRequest("Producto sin vender en el {fecha}");
-            }
+        // public async Task<ActionResult<ProductoDto>> GetProductSale(DateTime fecha)
+        // {
+        //     var producto = await unitOfWork.Productos.GetProductosSale(fecha);
+        //     if(producto == null)
+        //     {
+        //         return BadRequest("Producto sin vender en el {fecha}");
+        //     }
 
-            return mapper.Map<ProductoDto>(producto);
-        }
+        //     return mapper.Map<ProductoDto>(producto);
+        // }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
