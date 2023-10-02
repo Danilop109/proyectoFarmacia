@@ -28,6 +28,21 @@ namespace Aplicacion.Repositorio
             .FirstOrDefaultAsync(p => p.Id == id);
         }
 
+        //CONSULTA 5: Total de ventas del medicamento ‘Paracetamol’.
+        public async Task<int> GetSellParacetamol()
+        {
+            var paracetamol= "Paracetamol";
+            return await
+            (
+                from minv in _context.MovimientoInventarios
+                join inv in _context.Inventarios on minv.IdInventarioFk equals inv.Id
+                where minv.IdTipoMovimientoInventarioFk == 2
+                where inv.Nombre == paracetamol
+                select minv
+    ).CountAsync();
+        
+        }
+
         //CONCULTA 8: Cantidad total de dinero recaudado por las ventas de medicamentos.
         public async Task<double> MediTotalSales()
         {
@@ -253,63 +268,63 @@ namespace Aplicacion.Repositorio
 
         //CONSULTA 34: Medicamentos que no han sido vendidos en 2023.
         public async Task<IEnumerable<object>> GetMediNotSold2023()
-{
-    var medicamentosDisponibles = await (
-        from i in _context.Inventarios
-        join di in _context.DetalleMovInventarios on i.Id equals di.IdInventarioFk
-        join mv in _context.MovimientoInventarios on di.IdMovimientoInvFk equals mv.Id
-        where mv.IdTipoMovimientoInventarioFk == 2
-        where mv.FechaMovimiento.Year == 2023
-        select i.Id
-    ).Distinct().ToListAsync();
-
-    var todosLosMedicamentos = await (
-        from i in _context.Inventarios
-        select i.Id
-    ).ToListAsync();
-
-    var medicamentosNoVendidosEn2023 = todosLosMedicamentos.Except(medicamentosDisponibles);
-
-    var medicamentosNoVendidos = await (
-        from i in _context.Inventarios
-        where medicamentosNoVendidosEn2023.Contains(i.Id)
-        select new
         {
-            MedicamentoId = i.Id,
-            NombreMedicamento = i.Nombre
+            var medicamentosDisponibles = await (
+                from i in _context.Inventarios
+                join di in _context.DetalleMovInventarios on i.Id equals di.IdInventarioFk
+                join mv in _context.MovimientoInventarios on di.IdMovimientoInvFk equals mv.Id
+                where mv.IdTipoMovimientoInventarioFk == 2
+                where mv.FechaMovimiento.Year == 2023
+                select i.Id
+            ).Distinct().ToListAsync();
+
+            var todosLosMedicamentos = await (
+                from i in _context.Inventarios
+                select i.Id
+            ).ToListAsync();
+
+            var medicamentosNoVendidosEn2023 = todosLosMedicamentos.Except(medicamentosDisponibles);
+
+            var medicamentosNoVendidos = await (
+                from i in _context.Inventarios
+                where medicamentosNoVendidosEn2023.Contains(i.Id)
+                select new
+                {
+                    MedicamentoId = i.Id,
+                    NombreMedicamento = i.Nombre
+                }
+            ).ToListAsync();
+
+            return medicamentosNoVendidos;
         }
-    ).ToListAsync();
 
-    return medicamentosNoVendidos;
-}
+        //CONSULTA 36: Total de medicamentos vendidos en el primer trimestre de 2023.
 
-//CONSULTA 36: Total de medicamentos vendidos en el primer trimestre de 2023.
-
-public async Task<IEnumerable<object>> GetFirstQuarterOf2023()
-{
-    var Trimestre = await (
-        from di in _context.DetalleMovInventarios
-        join i in _context.Inventarios on di.IdInventarioFk equals i.Id
-        join mv in _context.MovimientoInventarios on di.IdMovimientoInvFk equals mv.Id
-        where mv.IdTipoMovimientoInventarioFk == 2
-        where mv.FechaMovimiento.Year == 2023
-        where mv.FechaMovimiento.Month >= 1 && mv.FechaMovimiento.Month <= 3 
-        group new { mv, i, di } by new { mv.FechaMovimiento.Year, primertri = 1 } into grouped 
-        select new
+        public async Task<IEnumerable<object>> GetFirstQuarterOf2023()
         {
-            Quarter = grouped.Key.primertri,
-            TotalMedicinesSold = grouped.Sum(item => item.di.Cantidad),
-            Medicamentos = grouped.Select(item => new
-            {
-                MedicamentoId = item.i.Id,
-                nombre = item.i.Nombre,
-                CantidadVendida = item.di.Cantidad
-            }).ToList()
-        }
-    ).ToListAsync();
+            var Trimestre = await (
+                from di in _context.DetalleMovInventarios
+                join i in _context.Inventarios on di.IdInventarioFk equals i.Id
+                join mv in _context.MovimientoInventarios on di.IdMovimientoInvFk equals mv.Id
+                where mv.IdTipoMovimientoInventarioFk == 2
+                where mv.FechaMovimiento.Year == 2023
+                where mv.FechaMovimiento.Month >= 1 && mv.FechaMovimiento.Month <= 3
+                group new { mv, i, di } by new { mv.FechaMovimiento.Year, primertri = 1 } into grouped
+                select new
+                {
+                    Quarter = grouped.Key.primertri,
+                    TotalMedicinesSold = grouped.Sum(item => item.di.Cantidad),
+                    Medicamentos = grouped.Select(item => new
+                    {
+                        MedicamentoId = item.i.Id,
+                        nombre = item.i.Nombre,
+                        CantidadVendida = item.di.Cantidad
+                    }).ToList()
+                }
+            ).ToListAsync();
 
-    return Trimestre;
-}
+            return Trimestre;
+        }
 
 
 
