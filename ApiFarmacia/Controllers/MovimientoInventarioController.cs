@@ -62,12 +62,13 @@ public class MovimientoInventarioController : BaseApiController
     [HttpGet("GetNotSoldYet")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<IEnumerable<InventarioDto>>> GetNot(){
+    public async Task<ActionResult<IEnumerable<InventarioDto>>> GetNot()
+    {
         var productosNoVendidos = await _unitOfWork.MovimientoInventarios.GetNotSoldYet();
         if (productosNoVendidos == null || !productosNoVendidos.Any())
-    {
-        return NotFound("No se encontraron medicamentos que no fueran vendidos.");
-    }
+        {
+            return NotFound("No se encontraron medicamentos que no fueran vendidos.");
+        }
         return _mapper.Map<List<InventarioDto>>(productosNoVendidos);
     }
 
@@ -75,7 +76,7 @@ public class MovimientoInventarioController : BaseApiController
     public async Task<IEnumerable<PersonaDto>> GetPatient()
     {
         var patientParacetamol = await _unitOfWork.MovimientoInventarios.GetPatientParacetamol();
-        return _mapper.Map<IEnumerable<PersonaDto>> (patientParacetamol);
+        return _mapper.Map<IEnumerable<PersonaDto>>(patientParacetamol);
     }
 
     // CONSULTA 14: Obtener el total de medicamentos vendidos en marzo de 2023
@@ -102,24 +103,24 @@ public class MovimientoInventarioController : BaseApiController
     [HttpGet("GetCantidadVendidasPorEmpleado")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IEnumerable<object>> GetCountSales()
-        {
-            var count = await _unitOfWork.MovimientoInventarios.GetCountSales();
-            return _mapper.Map<IEnumerable<object>>(count);
-        }
-    
+    public async Task<IEnumerable<object>> GetCountSales()
+    {
+        var count = await _unitOfWork.MovimientoInventarios.GetCountSales();
+        return _mapper.Map<IEnumerable<object>>(count);
+    }
+
     //CONSULTA 20: Empleados que hayan hecho más de 5 ventas en total.
     [HttpGet("GetCantidadEmpleadoMas5Ventas")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IEnumerable<object>> GetCountMoreThan5Sales()
-        {
-            var count5 = await _unitOfWork.MovimientoInventarios.GetCountMoreThan5Sales();
-            return _mapper.Map<IEnumerable<object>>(count5);
-        }
+    public async Task<IEnumerable<object>> GetCountMoreThan5Sales()
+    {
+        var count5 = await _unitOfWork.MovimientoInventarios.GetCountMoreThan5Sales();
+        return _mapper.Map<IEnumerable<object>>(count5);
+    }
 
-     //CONSULTA 24: Proveedor que ha suministrado más medicamentos en 2023.
-     [HttpGet("GetCantidadProveedoresSuministraron")]
+    //CONSULTA 24: Proveedor que ha suministrado más medicamentos en 2023.
+    [HttpGet("GetCantidadProveedoresSuministraron")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IEnumerable<object>> GetProveeMoreMedi()
@@ -129,13 +130,14 @@ public class MovimientoInventarioController : BaseApiController
     }
 
     //CONSULTA 26: Total de medicamentos vendidos por mes en 2023.
-     [HttpGet("GetTotalByMonth2023")]
+    [HttpGet("GetTotalByMonth2023")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IEnumerable<object>> GetTotalMediSoldByMonth(){
-            var sold = await _unitOfWork.MovimientoInventarios.GetTotalMediSoldByMonth();
-            return _mapper.Map<IEnumerable<object>>(sold);
-        }
+    public async Task<IEnumerable<object>> GetTotalMediSoldByMonth()
+    {
+        var sold = await _unitOfWork.MovimientoInventarios.GetTotalMediSoldByMonth();
+        return _mapper.Map<IEnumerable<object>>(sold);
+    }
     //CONSULTA 28: Número total de proveedores que suministraron medicamentos en 2023.
     [HttpGet("Totalprovee2023")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -143,6 +145,36 @@ public class MovimientoInventarioController : BaseApiController
     public async Task<IEnumerable<object>> Totalprovee2023()
     {
         var total = await _unitOfWork.MovimientoInventarios.TotalproveeGive2023();
+        return _mapper.Map<IEnumerable<object>>(total);
+    }
+
+    //CONSULTA 32: Empleado que ha vendido la mayor cantidad de medicamentos distintos en 2023.
+    [HttpGet("GetEmployeeMediSold2023")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<object> GetEmployeeMediSoldyear()
+    {
+        var total = await _unitOfWork.MovimientoInventarios.GetEmployeeMediSold2023();
+        return _mapper.Map<object>(total);
+    }
+
+    //CONSULTA 34: Medicamentos que no han sido vendidos en 2023.
+    [HttpGet("GetMediNotSold2023")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IEnumerable<object>> GetMediNotSold()
+    {
+        var total = await _unitOfWork.MovimientoInventarios.GetMediNotSold2023();
+        return _mapper.Map<IEnumerable<object>>(total);
+    }
+    //CONSULTA 36: Total de medicamentos vendidos en el primer trimestre de 2023.
+    [HttpGet("GetFirstQuarterOf2023")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+
+    public async Task<IEnumerable<object>> GetFirstQuarter2023()
+    {
+        var total = await _unitOfWork.MovimientoInventarios.GetFirstQuarterOf2023();
         return _mapper.Map<IEnumerable<object>>(total);
     }
 

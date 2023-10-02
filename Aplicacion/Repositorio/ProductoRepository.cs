@@ -78,6 +78,14 @@ namespace Aplicacion.Repositorio
         //      ).ToListAsync();
         //  }
 
+        // CONSULTA 28: Medicamentos con un precio mayor a 50 y un stock menor a 100.
+        public async Task<IEnumerable<Producto>> GetProductosPrecioMayorA50StockMenorA100()
+        {
+            return await _context.Productos
+            .Where(p => p.Precio > 50 && p.Inventario.Stock < 100)
+            .ToListAsync();
+        }
+
         
 }
 }

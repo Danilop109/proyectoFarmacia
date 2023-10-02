@@ -7,6 +7,7 @@ namespace Dominio.Interfaces
       Task<IEnumerable<Producto>> MedicamentosCompradosPorProveedor(string nombre);
       Task<Producto> MediMoreExpensive();
       // Task<IEnumerable<Producto>> GetProductosSale(DateTime fecha);
+      Task<IEnumerable<Producto>> GetProductosPrecioMayorA50StockMenorA100();
     }
     
 }

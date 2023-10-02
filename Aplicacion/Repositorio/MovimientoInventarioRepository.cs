@@ -227,6 +227,89 @@ namespace Aplicacion.Repositorio
             return result;
         }
 
+        //CONSULTA 32: Empleado que ha vendido la mayor cantidad de medicamentos distintos en 2023.
+        public async Task<object> GetEmployeeMediSold2023()
+        {
+            var year = 2023;
+
+            var consulta = (
+                from mv in _context.MovimientoInventarios
+                join p in _context.Personas on mv.IdVendedorFk equals p.Id
+                where mv.IdTipoMovimientoInventarioFk == 2 &&
+                      mv.FechaMovimiento.Year == year
+                where p.IdRolFk == 2
+                group mv by new { p.Id, p.Nombre } into grouped
+                orderby grouped.Select(mv => mv.IdInventarioFk).Distinct().Count() descending
+                select new
+                {
+                    IdVendedor = grouped.Key.Id,
+                    NombreVendedor = grouped.Key.Nombre,
+                    DistinctMedicinesSoldCount = grouped.Select(mv => mv.IdInventarioFk).Distinct().Count()
+                }
+            ).FirstOrDefaultAsync();
+
+            return await consulta;
+        }
+
+        //CONSULTA 34: Medicamentos que no han sido vendidos en 2023.
+        public async Task<IEnumerable<object>> GetMediNotSold2023()
+{
+    var medicamentosDisponibles = await (
+        from i in _context.Inventarios
+        join di in _context.DetalleMovInventarios on i.Id equals di.IdInventarioFk
+        join mv in _context.MovimientoInventarios on di.IdMovimientoInvFk equals mv.Id
+        where mv.IdTipoMovimientoInventarioFk == 2
+        where mv.FechaMovimiento.Year == 2023
+        select i.Id
+    ).Distinct().ToListAsync();
+
+    var todosLosMedicamentos = await (
+        from i in _context.Inventarios
+        select i.Id
+    ).ToListAsync();
+
+    var medicamentosNoVendidosEn2023 = todosLosMedicamentos.Except(medicamentosDisponibles);
+
+    var medicamentosNoVendidos = await (
+        from i in _context.Inventarios
+        where medicamentosNoVendidosEn2023.Contains(i.Id)
+        select new
+        {
+            MedicamentoId = i.Id,
+            NombreMedicamento = i.Nombre
+        }
+    ).ToListAsync();
+
+    return medicamentosNoVendidos;
+}
+
+//CONSULTA 36: Total de medicamentos vendidos en el primer trimestre de 2023.
+
+public async Task<IEnumerable<object>> GetFirstQuarterOf2023()
+{
+    var Trimestre = await (
+        from di in _context.DetalleMovInventarios
+        join i in _context.Inventarios on di.IdInventarioFk equals i.Id
+        join mv in _context.MovimientoInventarios on di.IdMovimientoInvFk equals mv.Id
+        where mv.IdTipoMovimientoInventarioFk == 2
+        where mv.FechaMovimiento.Year == 2023
+        where mv.FechaMovimiento.Month >= 1 && mv.FechaMovimiento.Month <= 3 
+        group new { mv, i, di } by new { mv.FechaMovimiento.Year, primertri = 1 } into grouped 
+        select new
+        {
+            Quarter = grouped.Key.primertri,
+            TotalMedicinesSold = grouped.Sum(item => item.di.Cantidad),
+            Medicamentos = grouped.Select(item => new
+            {
+                MedicamentoId = item.i.Id,
+                nombre = item.i.Nombre,
+                CantidadVendida = item.di.Cantidad
+            }).ToList()
+        }
+    ).ToListAsync();
+
+    return Trimestre;
+}
 
 
 
