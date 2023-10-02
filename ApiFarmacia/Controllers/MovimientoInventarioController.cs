@@ -78,6 +78,17 @@ public class MovimientoInventarioController : BaseApiController
         return _mapper.Map<IEnumerable<object>>(mediSale2023);
     }
 
+    // CONSULTAS 16: Ganancia total por proveedor en 2023 (asumiendo un campo precioCompra en Compras).
+    [HttpGet("GetGainProveedores2023")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IEnumerable<object>> GetGainProvee2023()
+    {
+        var gain = await _unitOfWork.MovimientoInventarios.GainProvee2023();
+        return _mapper.Map<IEnumerable<object>>(gain);
+    }
+    
+
 
 
     [HttpPost]

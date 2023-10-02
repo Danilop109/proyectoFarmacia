@@ -75,5 +75,28 @@ namespace Aplicacion.Repositorio
         ).ToListAsync();
     }
 
+    // CONSULTAS 16: Ganancia total por proveedor en 2023 (asumiendo un campo precioCompra en Compras).
+    public async Task<IEnumerable<object>> GainProvee2023()
+    {
+        var inicioYear= new DateTime(2023, 1, 1);
+        var finalYear = new DateTime(2023, 12, 31);
+        return await (
+            from mv in _context.MovimientoInventarios
+            join p in _context.Personas on mv.IdClienteFk equals p.Id
+            join dm in _context.DetalleMovInventarios on mv.IdInventarioFk equals dm.Id
+            where mv.IdTipoMovimientoInventarioFk == 1
+            where mv.FechaMovimiento >= inicioYear && mv.FechaMovimiento <= finalYear
+            where p.IdRolFk == 3
+            
+            group new { p, dm } by new { p.Id, p.Nombre } into grouped
+        select new
+        {
+            IdProveedor = grouped.Key.Id,
+            NombreProveedor = grouped.Key.Nombre,
+            PrecioCompraTotal = grouped.Sum(item => item.dm.Precio * item.dm.Cantidad)
+        }
+        ).ToListAsync();
+    }
+
     }
 }
