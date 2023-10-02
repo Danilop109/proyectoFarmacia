@@ -57,6 +57,15 @@ namespace ApiFarmacia.Controllers
             return mapper.Map<List<RecetaMedicaDto>>(receta);
         }
 
+        [HttpGet("pacienteGastoMasPlata")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IEnumerable<object>> GetSpendMoreMoney()
+        {
+            var patient= await unitOfWork.RecetaMedicas.GetPatientSpendMoreMoney();
+            return mapper.Map<List<object>>(patient);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

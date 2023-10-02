@@ -6,5 +6,6 @@ namespace Dominio.Interfaces
     public interface IRecetaMedica : IGenericRepository<RecetaMedica>
     {
         Task<IEnumerable<RecetaMedica>> GetRecetaSinceDate();
+        Task<IEnumerable<object>> GetPatientSpendMoreMoney();
     }
 }
