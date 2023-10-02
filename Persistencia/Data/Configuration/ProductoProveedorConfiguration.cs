@@ -19,6 +19,8 @@ namespace Persistencia.Data.Configuration
             builder.HasOne(p => p.Producto)
             .WithMany(p => p.ProductoProveedores)
             .HasForeignKey(p => p.IdProductoFk);
+
+            
         }
     }
 }

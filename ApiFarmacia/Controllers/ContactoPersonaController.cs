@@ -51,6 +51,21 @@ namespace ApiFarmacia.Controllers;
             return this._mapper.Map<ContactoPersonaDto>(contactopersona);
         }
 
+        //Listar los proveedores con su informacion de contacto en medicamentos
+
+        [HttpGet("listarproveedor")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<object>> GetContact()
+        {
+            var productos = await _unitOfWork.ContactoPersonas.GetContactSupplier();
+            if(productos == null)
+            {
+                return BadRequest("No se ha encontrado");
+            }
+            return _mapper.Map<List<object>>(productos);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

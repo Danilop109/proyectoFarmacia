@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Dominio.Entities;
@@ -35,7 +36,7 @@ namespace Aplicacion.Repositorio
             .FirstOrDefaultAsync(p => p.Id == id );
         }
 
-         //Medicamentos comprados a un provedor (x)
+        //CONSULTA 3: Medicamentos comprados a un provedor (x)
 
         public async Task<IEnumerable<Producto>> MedicamentosCompradosPorProveedor(string nombre)
         {
@@ -47,11 +48,12 @@ namespace Aplicacion.Repositorio
                             .ToListAsync();
 
         }
-        //  Medicamentos antes de que se caduquen en una fecha
-        public async Task<IEnumerable<Producto>> GetMediExpireBeforeDate(DateTime expireDate)
+        //CONSULTA 6: Medicamentos que caducan antes del 1 de enero de 2024.
+        public async Task<IEnumerable<Producto>> GetMediExpireBeforeDate()
         {
+            DateTime expireDate = DateTime.Parse("January 01, 2024", CultureInfo.InvariantCulture);
             return await _context.Productos
-                        .Where(d => d.FechaCaducidad.Date <= expireDate)
+                        .Where(d => d.FechaCaducidad <= expireDate)
                         .ToListAsync();
         }
 
