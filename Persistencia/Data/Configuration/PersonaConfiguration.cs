@@ -43,6 +43,8 @@ namespace Persistencia.Data.Configuration
             .WithMany(t => t.Personas)
             .HasForeignKey(t => t.IdRolFk);
 
+            
+
             builder.HasOne(u => u.User)
             .WithOne(u => u.Persona)
             .HasForeignKey<User>(u => u.IdPersonaFk);

@@ -10,13 +10,10 @@ namespace ApiFarmacia.Dtos
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
-        public string Apellido { get; set; }
         public string Documento  {get; set; }
-        public Persona ResponsableFk {get; set;}
-        public Persona ReceptorFk {get; set;}
-        public RolDto Rol {get; set;} 
-        public TipoDocumentoDto TipoDocumento{get;set;}
-        public TipoPersonaDto TipoPersona {get; set; }
+        public int IdRolFk {get; set;} 
+        public int IdTipoDocumentoFk {get;set;}
+        public int IdTipoPersonaFk {get; set; }
    
     }
 }
