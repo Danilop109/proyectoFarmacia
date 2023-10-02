@@ -7,5 +7,6 @@ namespace Dominio.Interfaces
     {
         Task<IEnumerable<RecetaMedica>> GetRecetaSinceDate();
         Task<IEnumerable<object>> GetPatientSpendMoreMoney();
+        Task<IEnumerable<object>> GetPatietNoyBuyYet();
     }
 }

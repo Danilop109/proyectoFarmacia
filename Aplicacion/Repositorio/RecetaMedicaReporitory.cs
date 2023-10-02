@@ -73,6 +73,36 @@ namespace Aplicacion.Repositorio
                 ).ToListAsync();
         }
 
+        // CONSULTA 30: Pacientes que no han comprado ningún medicamento en 2023.
+        public async Task<IEnumerable<object>> GetPatietNoyBuyYet()
+{
+    var inicioYear = new DateTime(2023, 1, 1);
+    var finalYear = new DateTime(2023, 12, 31);
+
+    var pacienteNO = await (
+        from mv in _context.MovimientoInventarios
+        join p in _context.Personas on mv.IdClienteFk equals p.Id
+        where mv.IdTipoMovimientoInventarioFk == 1
+        where p.IdRolFk == 4
+        where mv.FechaMovimiento >= inicioYear && mv.FechaMovimiento <= finalYear
+        select p.Id
+    ).ToListAsync();
+
+    var pacientesSi = await (
+        from p in _context.Personas
+        where p.IdRolFk == 4
+        where !pacienteNO.Contains(p.Id)
+        select new
+        {
+            NombrePaciente = p.Nombre,
+            Documento = p.Documento
+        }
+    ).ToListAsync();
+
+    return pacientesSi;
+}
+
+
 
 
         

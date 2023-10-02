@@ -66,6 +66,19 @@ namespace ApiFarmacia.Controllers
             return mapper.Map<List<object>>(patient);
         }
 
+        [HttpGet("GetPatietNoHaComprado")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<IEnumerable<object>>> GetPatietNoy()
+        {
+            var patient= await unitOfWork.RecetaMedicas.GetPatietNoyBuyYet();
+            if (!patient.Any())
+            {
+                return NotFound("No se ha encontrado pacientes.");
+            }
+            return mapper.Map<List<object>>(patient);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

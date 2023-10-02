@@ -1,6 +1,7 @@
 using System.Globalization;
 using Dominio.Entities;
 using Dominio.Interfaces;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Persistencia;
 
@@ -39,6 +40,23 @@ namespace Aplicacion.Repositorio
             ).SumAsync();
 
             return totalDineroVentas;
+        }
+        //CONSULTA 9: Medicamentos que no han sido vendidos.
+        public async Task<IEnumerable<Inventario>> GetNotSoldYet()
+        {
+            var soldMedicines = await (
+                from mv in _context.MovimientoInventarios
+                where mv.IdTipoMovimientoInventarioFk == 2
+                select mv.IdInventarioFk
+            ).ToListAsync();
+
+            var notSoldMedicines = await (
+                from i in _context.Inventarios
+                where !soldMedicines.Contains(i.Id)
+                select i
+            ).ToListAsync();
+
+            return notSoldMedicines;
         }
         //CONSULTA 12:Pacientes que han comprado Paracetamol.
         public async Task<IEnumerable<Persona>> GetPatientParacetamol()
@@ -156,23 +174,64 @@ namespace Aplicacion.Repositorio
 
         }
 
-        //CONSULTA 26: Total de medicamentos vendidos por mes en 2023.
+        //CONSULTA 26: Total de medicamentos vendidos por mes en 2023. Probablemente no por mes
         public async Task<IEnumerable<object>> GetTotalMediSoldByMonth()
         {
-
-            return await (
-                from mv in _context.MovimientoInventarios
+            var resultadoPorMes = await (
+                from di in _context.DetalleMovInventarios
+                join i in _context.Inventarios on di.IdInventarioFk equals i.Id
+                join mv in _context.MovimientoInventarios on di.IdMovimientoInvFk equals mv.Id
                 where mv.IdTipoMovimientoInventarioFk == 2
                 where mv.FechaMovimiento.Year == 2023
-                group mv by new { mv.FechaMovimiento.Year, mv.FechaMovimiento.Month } into grouped
+                group new { mv, i, di } by new { mv.FechaMovimiento.Year, mv.FechaMovimiento.Month } into grouped
+                orderby grouped.Key.Month
                 select new
                 {
                     Year = grouped.Key.Year,
                     Month = grouped.Key.Month,
-                    TotalMedicinesSold = grouped.Count()
+                    TotalMedicinesSold = grouped.Sum(item => item.di.Cantidad),
+                    Medicamentos = grouped.Select(item => new
+                    {
+                        MedicamentoId = item.i.Id,
+                        NombreMedicamento = item.i.Nombre,
+                        CantidadVendida = item.di.Cantidad
+                    }).ToList()
                 }
             ).ToListAsync();
+
+            return resultadoPorMes;
         }
+
+        //CONSULTA 28: Número total de proveedores que suministraron medicamentos en 2023.NO ME SALEEE, TE ODIO
+        public async Task<IEnumerable<object>> TotalproveeGive2023()
+        {
+            var inicioYear = new DateTime(2023, 1, 1);
+            var finalYear = new DateTime(2023, 12, 31);
+
+            var result = await (
+                from mv in _context.MovimientoInventarios
+                join p in _context.Personas on mv.IdClienteFk equals p.Id
+                where mv.IdTipoMovimientoInventarioFk == 1
+                where p.IdRolFk == 3
+                where mv.FechaMovimiento >= inicioYear && mv.FechaMovimiento <= finalYear
+                group p by new { p.Id, p.Nombre, p.Documento } into grouped
+                select new
+                {
+                    IdProveedor = grouped.Key.Id,
+                    NombreProveedor = grouped.Key.Nombre,
+                    DocumentoProveedor = grouped.Key.Documento,
+                    VecesSuministradas = grouped.Count()
+                }
+            ).ToListAsync();
+
+            return result;
+        }
+
+
+
+
+
+
 
 
 
