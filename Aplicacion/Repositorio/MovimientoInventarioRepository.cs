@@ -128,7 +128,7 @@ namespace Aplicacion.Repositorio
                 {
                     IdVendedor = grouped.Key.Id,
                     NombreVendedor = grouped.Key.Nombre,
-                    NumeroVentas = grouped.Count() 
+                    NumeroVentas = grouped.Count()
                 }
                 ).ToListAsync();
         }
@@ -145,19 +145,36 @@ namespace Aplicacion.Repositorio
                where mv.IdTipoMovimientoInventarioFk == 1
                where p.IdRolFk == 3
                where mv.FechaMovimiento >= inicioYear && mv.FechaMovimiento <= finalYear
-               group new {mv, dm} by new { p.Id, p.Nombre} into grouped
-                select new
-                {
-                    IdProveedor = grouped.Key.Id,
-                    NombreProvedor = grouped.Key.Nombre,
-                    VecesSuministradas = grouped.Count()
-                }
+               group new { mv, dm } by new { p.Id, p.Nombre } into grouped
+               select new
+               {
+                   IdProveedor = grouped.Key.Id,
+                   NombreProvedor = grouped.Key.Nombre,
+                   VecesSuministradas = grouped.Count()
+               }
                 ).ToListAsync();
-              
+
         }
 
         //CONSULTA 26: Total de medicamentos vendidos por mes en 2023.
-        
+        public async Task<IEnumerable<object>> GetTotalMediSoldByMonth()
+        {
+
+            return await (
+                from mv in _context.MovimientoInventarios
+                where mv.IdTipoMovimientoInventarioFk == 2
+                where mv.FechaMovimiento.Year == 2023
+                group mv by new { mv.FechaMovimiento.Year, mv.FechaMovimiento.Month } into grouped
+                select new
+                {
+                    Year = grouped.Key.Year,
+                    Month = grouped.Key.Month,
+                    TotalMedicinesSold = grouped.Count()
+                }
+            ).ToListAsync();
+        }
+
+
 
     }
 }

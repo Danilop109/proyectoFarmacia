@@ -117,6 +117,15 @@ public class MovimientoInventarioController : BaseApiController
         var suministra = await _unitOfWork.MovimientoInventarios.GetProveeMoreMedi2023();
         return _mapper.Map<IEnumerable<object>>(suministra);
     }
+
+    //CONSULTA 26: Total de medicamentos vendidos por mes en 2023.
+     [HttpGet("GetTotalByMonth2023")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IEnumerable<object>> GetTotalMediSoldByMonth(){
+            var sold = await _unitOfWork.MovimientoInventarios.GetTotalMediSoldByMonth();
+            return _mapper.Map<IEnumerable<object>>(sold);
+        }
     
 
     [HttpPost]
