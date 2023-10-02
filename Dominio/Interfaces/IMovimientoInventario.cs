@@ -17,6 +17,7 @@ namespace Dominio.Interfaces
         Task<object> GetEmployeeMediSold2023();
         Task<IEnumerable<object>> GetMediNotSold2023();
         Task<IEnumerable<object>> GetFirstQuarterOf2023();
+        Task<int> GetSellParacetamol();
         
     }
 }

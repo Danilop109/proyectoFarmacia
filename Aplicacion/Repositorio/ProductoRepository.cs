@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Dominio.Entities;
 using Dominio.Interfaces;
@@ -64,20 +65,6 @@ namespace Aplicacion.Repositorio
             .FirstOrDefaultAsync();
         }
 
-        //Obtener el total de medicamentos vendidos en marzo de 2023.
-        //  public async Task<IEnumerable<Producto>> GetProductosSale(DateTime fecha)
-        //  {
-        //      return await (
-        //          from rm in _context.Productos
-        //          join mi in _context.TipoMovInventarios on rm.IdInventarioFk equals mi.Id
-        //          join i in _context.Productos on rm.Id equals i.IdInventarioFk
-        //          where mi.Id == 1
-        //          where i.Id == 3
-        //          where i.ToLower() == "paracetamol"
-        //          select rm 
-        //      ).ToListAsync();
-        //  }
-
         // CONSULTA 28: Medicamentos con un precio mayor a 50 y un stock menor a 100.
         public async Task<IEnumerable<Producto>> GetProductosPrecioMayorA50StockMenorA100()
         {
@@ -87,5 +74,25 @@ namespace Aplicacion.Repositorio
         }
 
         
+        // CONSULTA 7: Total de medicamentos vendidos por cada proveedor.
+       public async Task<IEnumerable<object>> GetTotMediVenProveedor()
+{
+    var resultado = await (
+        from pp in _context.ProductoProveedores
+        join pro in _context.Personas on pp.IdPersonaFk equals pro.Id
+        join p in _context.Productos on pp.IdProductoFk equals p.Id
+        join i in _context.Inventarios on p.IdInventarioFk equals i.Id
+        where pro.IdRolFk == 3
+        group p by new { pro.Id, pro.Nombre } into grouped 
+        select new
+        {
+            ProviderId = grouped.Key.Id,
+            ProviderName = grouped.Key.Nombre,
+            TotalProductos = grouped.Count()
+        }
+    ).ToListAsync();
+
+    return resultado;
+}
 }
 }

@@ -50,6 +50,16 @@ public class MovimientoInventarioController : BaseApiController
         return this._mapper.Map<MovimientoInventario>(movimientoInventario);
     }
 
+    [HttpGet("GetSellMedicament")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+
+    public async Task<int> GetSell()
+    {
+        var medicamento = await _unitOfWork.MovimientoInventarios.GetSellParacetamol();
+        return _mapper.Map<int>(medicamento);
+    }
+
     [HttpGet("totalSales")]
 
     public async Task<double> GetSales()
