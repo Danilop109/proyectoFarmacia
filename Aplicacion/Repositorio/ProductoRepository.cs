@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Dominio.Entities;
 using Dominio.Interfaces;
@@ -73,5 +74,25 @@ namespace Aplicacion.Repositorio
         }
 
         
+        // CONSULTA 7: Total de medicamentos vendidos por cada proveedor.
+       public async Task<IEnumerable<object>> GetTotMediVenProveedor()
+{
+    var resultado = await (
+        from pp in _context.ProductoProveedores
+        join pro in _context.Personas on pp.IdPersonaFk equals pro.Id
+        join p in _context.Productos on pp.IdProductoFk equals p.Id
+        join i in _context.Inventarios on p.IdInventarioFk equals i.Id
+        where pro.IdRolFk == 3
+        group p by new { pro.Id, pro.Nombre } into grouped 
+        select new
+        {
+            ProviderId = grouped.Key.Id,
+            ProviderName = grouped.Key.Nombre,
+            TotalProductos = grouped.Count()
+        }
+    ).ToListAsync();
+
+    return resultado;
+}
 }
 }

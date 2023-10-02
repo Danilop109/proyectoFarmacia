@@ -326,6 +326,8 @@ namespace Aplicacion.Repositorio
             return Trimestre;
         }
 
+        // CONSULTA 7: Total de medicamentos vendidos por cada proveedor.
+       
 
 
 
