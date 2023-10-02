@@ -32,5 +32,21 @@ namespace Aplicacion.Repositorio
             .Include(p => p.TipoContacto)
             .FirstOrDefaultAsync(p => p.Id == id);
         }
+
+        //CONSULTA 2: Listar los proveedores con su información de contacto en medicamentos.
+        public async Task<IEnumerable<object>> GetContactSupplier()
+        {
+            return await (
+                from cp in _context.ContactoPersonas
+                join p in _context.Personas on cp.IdPersonaFk equals p.Id
+                join r in _context.Rols on p.IdRolFk equals r.Id
+                where p.IdRolFk == 3
+                select new
+                {
+                    Nombreproveedor = p.Nombre,
+                    NumeroContacto = cp.Numero
+                }  
+            ).ToListAsync();
+        }
     }
 }

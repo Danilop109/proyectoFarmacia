@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Dominio.Entities;
@@ -37,11 +38,12 @@ namespace Aplicacion.Repositorio
             .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        //Obtener recetas médicas emitidas después del 1 de enero de 2023.
-        public async Task<IEnumerable<RecetaMedica>> GetRecetaSinceDate(DateTime date)
+        // CONSULTA 4: Obtener recetas médicas emitidas después del 1 de enero de 2023.
+        public async Task<IEnumerable<RecetaMedica>> GetRecetaSinceDate()
         {
+            DateTime date = DateTime.Parse("January 01, 2023", CultureInfo.InvariantCulture);
             return await _context.RecetaMedicas
-                            .Where (d => d.FechaEmicion.Date >= date.Date)
+                            .Where (d => d.FechaEmicion >= date)
                             .Include(m => m.MedicamentoRecetados).ThenInclude(m => m.Inventario)
                             .Include(d => d.DoctorFk)
                             .Include(p => p.PacienteFk)

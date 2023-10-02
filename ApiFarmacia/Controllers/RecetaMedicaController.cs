@@ -47,13 +47,13 @@ namespace ApiFarmacia.Controllers
             return mapper.Map<RecetaMedicaDto>(llamado);
         }
 
-        [HttpGet("RecetaSinceDate/{date}")]
+        [HttpGet("RecetaSinceDate")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<IEnumerable<RecetaMedicaDto>>> Get3(DateTime date)
+        public async Task<ActionResult<IEnumerable<RecetaMedicaDto>>> Get3()
         {
-            var receta= await unitOfWork.RecetaMedicas.GetRecetaSinceDate(date);
+            var receta= await unitOfWork.RecetaMedicas.GetRecetaSinceDate();
             return mapper.Map<List<RecetaMedicaDto>>(receta);
         }
 
