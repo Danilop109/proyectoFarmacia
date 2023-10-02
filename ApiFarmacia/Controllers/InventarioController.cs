@@ -81,12 +81,6 @@ public class InventarioController : BaseApiController
         inventarioDto.Id = inventario.Id;
         return CreatedAtAction(nameof(Post), new { id = inventarioDto.Id }, inventarioDto);
     }
-    public async Task<ActionResult<IEnumerable<InventarioDto>>> Get5()
-    {
-        var inventario = await _unitOfWork.Inventarios.GetAllAsync();
-        return _mapper.Map<List<InventarioDto>>(inventario);
-    }
-
 
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
