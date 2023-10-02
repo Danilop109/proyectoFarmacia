@@ -82,6 +82,15 @@ public class ProductoController : BaseApiController
         return mapper.Map<ProductoDto>(caro);
     }
 
+     [HttpGet("GetProductosPrecioMayorA50StockMenorA100")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+
+    public async Task<ActionResult<IEnumerable<ProductoDto>>> GetProductosPre50StockMenA100()
+    {
+        var caro = await unitOfWork.Productos.GetProductosPrecioMayorA50StockMenorA100();
+        return mapper.Map<List<ProductoDto>>(caro);
+    }
+    
     // [HttpGet("medicamentosVendidos/{fecha}")]
     // [ProducesResponseType(StatusCodes.Status200OK)]
 

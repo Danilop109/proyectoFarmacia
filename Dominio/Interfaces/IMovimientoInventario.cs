@@ -7,6 +7,16 @@ namespace Dominio.Interfaces
         Task<double> MediTotalSales();
         Task<IEnumerable<Persona>> GetPatientParacetamol();
         Task<IEnumerable<object>> GetMediSale2023();
+        Task<IEnumerable<object>> GainProvee2023();
+        Task<IEnumerable<object>> GetCountSales();
+        Task<IEnumerable<object>> GetCountMoreThan5Sales();
+        Task<IEnumerable<object>> GetProveeMoreMedi2023();
+        Task<IEnumerable<object>> GetTotalMediSoldByMonth();
+        Task<IEnumerable<Inventario>> GetNotSoldYet();
+        Task<IEnumerable<object>> TotalproveeGive2023();
+        Task<object> GetEmployeeMediSold2023();
+        Task<IEnumerable<object>> GetMediNotSold2023();
+        Task<IEnumerable<object>> GetFirstQuarterOf2023();
         
     }
 }
