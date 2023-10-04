@@ -48,20 +48,7 @@ namespace ApiFarmacia.Controllers
             return mapper.Map<ProductoProveedorDto>(llamado);
         }
 
-        //Listar los proveedores con su informacion de contacto en medicamentos
-
-        [HttpGet("listarproveedor")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-
-        public async Task<ActionResult<IEnumerable<ProductoProveedorDto>>> Get1()
-        {
-            var productos = await unitOfWork.ProductoProveedores.ObtenerTodaInformacion();
-            if(productos == null)
-            {
-                return BadRequest();
-            }
-            return mapper.Map<List<ProductoProveedorDto>>(productos);
-        }
+        
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]

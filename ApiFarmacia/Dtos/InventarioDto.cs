@@ -10,15 +10,7 @@ namespace ApiFarmacia.Dtos
     {
         public int Id {get; set;}
         public string Nombre {get; set;}
-        public int Stock {get; set;}
-        public int StockMin {get; set;}
-        public int StockMax {get; set;}
-        public DateTime FechaExpiracion {get; set;}
-        public int IdPresentacionFk {get; set;}
-
-        
-
-        
+        public int Stock {get; set;}        
 
     }
 }

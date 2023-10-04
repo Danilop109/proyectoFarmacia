@@ -4,6 +4,7 @@ using iText.Kernel.XMP.Options;
 using Microsoft.EntityFrameworkCore;
 using Persistencia;
 using AspNetCoreRateLimit;
+using ApiFarmacia.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+// builder.Services.AddScoped<IUserService, UserService>(); 
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigureRatelimiting();
 builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
@@ -32,6 +34,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 
 app.UseCors("CorsPolicy");
 

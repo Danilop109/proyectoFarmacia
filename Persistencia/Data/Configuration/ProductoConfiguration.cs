@@ -14,12 +14,6 @@ namespace Persistencia.Data.Configuration
         {
             builder.ToTable("Producto");
 
-            builder.Property(n => n.Nombre)
-            .HasColumnName("NombreProducto")
-            .HasColumnType("varchar")
-            .IsRequired()
-            .HasMaxLength(100);
-
             builder.Property(n => n.Precio)
             .HasColumnName("Precio")
             .HasColumnType("double")
@@ -43,6 +37,7 @@ namespace Persistencia.Data.Configuration
             builder.HasOne(m => m.Inventario)
             .WithMany(m => m.Productos)
             .HasForeignKey(m=> m.IdInventarioFk);
+
 
         }
     }

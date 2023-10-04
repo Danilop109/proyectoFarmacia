@@ -21,22 +21,9 @@ namespace Persistencia.Data.Configuration
             .HasColumnType("int")
             .IsRequired();
 
-
-            builder.Property(p => p.StockMin)
-            .HasColumnName("stockMin")
-            .HasColumnType("int")
-            .IsRequired();
-
-
-            builder.Property(p => p.StockMax)
-            .HasColumnName("stockMax")
-            .HasColumnType("int")
-            .IsRequired();
-
             builder.HasOne(p => p.Presentacion)
             .WithMany(p => p.Inventarios)
             .HasForeignKey(p => p.IdPresentacionFk);
-
 
         }
     }

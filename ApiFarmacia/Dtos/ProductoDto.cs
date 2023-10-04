@@ -11,6 +11,5 @@ namespace ApiFarmacia.Dtos
         public double Precio {get; set;}
         public int Cantidad {get; set;}
         public DateTime FechaCaducidad {get; set;}
-        public List<ProveedorDto> Proveedores{ get; set; }
     }
 }

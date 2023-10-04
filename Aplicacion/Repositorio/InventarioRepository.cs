@@ -28,18 +28,25 @@ namespace Aplicacion.Repositorio
         public override async Task<Inventario> GetByIdAsync(int id)
         {
             return await _context.Inventarios
-            .Include(p => p.Presentacion )
+            .Include(p => p.Presentacion)
             .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        //Obtener todos los medicamentos con menos de (x) unidades en stock
+        //CONSULTA 1: Obtener todos los medicamentos con menos de (x) unidades en stock
 
         public async Task<IEnumerable<Inventario>> ObtenerMenosStockAsync(int cantidad)
         {
             return await _context.Inventarios
-            .Where(p => p.Stock < cantidad)
-            .ToListAsync();
+                .Where(p => p.Stock < cantidad)
+                .Select(p => new Inventario
+                {
+                    Id = p.Id,
+                    Nombre = p.Nombre,
+                    Stock = p.Stock,
+                })
+                .ToListAsync();
         }
+
 
 
     }

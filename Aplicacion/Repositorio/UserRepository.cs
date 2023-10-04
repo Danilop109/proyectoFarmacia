@@ -32,7 +32,7 @@ namespace Aplicacion.Repositorio
                 .Include(u => u.Rols)
                 .Include(u => u.RefreshTokens)
                 .Include(u => u.Persona)
-                .FirstOrDefaultAsync(u => u.Nombre.ToLower() == nombre.ToLower());
+                .FirstOrDefaultAsync(u => u.Username.ToLower() == nombre.ToLower());
         }
         public override async Task<IEnumerable<User>> GetAllAsync()
         {

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Dominio.Entities;
 using Dominio.Interfaces;
+using iText.Barcodes.Dmcode;
 using Microsoft.EntityFrameworkCore;
 using Persistencia;
 
@@ -23,6 +25,7 @@ namespace Aplicacion.Repositorio
             return await _context.RecetaMedicas
             .Include(p => p.DoctorFk)
             .Include(p => p.PacienteFk)
+            .Include(p => p.MovimientoInventario)
             .ToListAsync();
         }
 
@@ -31,17 +34,78 @@ namespace Aplicacion.Repositorio
             return await _context.RecetaMedicas
             .Include(p => p.DoctorFk)
             .Include(p => p.PacienteFk)
+            .Include(p => p.MovimientoInventario)
             .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<IEnumerable<RecetaMedica>> GetRecetaSinceDate(DateTime date)
+        // CONSULTA 4: Obtener recetas médicas emitidas después del 1 de enero de 2023.
+        public async Task<IEnumerable<RecetaMedica>> GetRecetaSinceDate()
         {
+            DateTime date = DateTime.Parse("January 01, 2023", CultureInfo.InvariantCulture);
             return await _context.RecetaMedicas
-                            .Where (d => d.FechaEmicion.Date >= date.Date)
+                            .Where (d => d.FechaEmicion >= date)
                             .Include(m => m.MedicamentoRecetados).ThenInclude(m => m.Inventario)
                             .Include(d => d.DoctorFk)
                             .Include(p => p.PacienteFk)
                             .ToListAsync();
         }
+
+        //CONSULTA 22: Paciente que ha gastado más dinero en 2023.
+        public async Task<IEnumerable<object>> GetPatientSpendMoreMoney()
+        {
+            var inicioYear = new DateTime(2023, 1, 1);
+            var finalYear = new DateTime(2023, 12, 31);
+            return await (
+                from dmi in _context.DetalleMovInventarios
+                join mv in _context.MovimientoInventarios on dmi.IdMovimientoInvFk equals mv.Id
+                join p in _context.Personas on mv.IdClienteFk equals p.Id
+                where mv.IdTipoMovimientoInventarioFk == 1
+                where p.IdRolFk == 4
+                where mv.FechaMovimiento >= inicioYear && mv.FechaMovimiento <= finalYear
+                group dmi by new {p.Nombre, p.Documento} into grouped
+                orderby grouped.Sum(item => item.Precio * item.Cantidad) descending
+                select new
+                {
+                    NombrePaciente = grouped.Key.Nombre,
+                    documento= grouped.Key.Documento,
+                    cuanto = grouped.Sum(item => item.Precio * item.Cantidad) 
+                }
+                ).ToListAsync();
+        }
+
+        // CONSULTA 30: Pacientes que no han comprado ningún medicamento en 2023.
+        public async Task<IEnumerable<object>> GetPatietNoyBuyYet()
+{
+    var inicioYear = new DateTime(2023, 1, 1);
+    var finalYear = new DateTime(2023, 12, 31);
+
+    var pacienteNO = await (
+        from mv in _context.MovimientoInventarios
+        join p in _context.Personas on mv.IdClienteFk equals p.Id
+        where mv.IdTipoMovimientoInventarioFk == 1
+        where p.IdRolFk == 4
+        where mv.FechaMovimiento >= inicioYear && mv.FechaMovimiento <= finalYear
+        select p.Id
+    ).ToListAsync();
+
+    var pacientesSi = await (
+        from p in _context.Personas
+        where p.IdRolFk == 4
+        where !pacienteNO.Contains(p.Id)
+        select new
+        {
+            NombrePaciente = p.Nombre,
+            Documento = p.Documento
+        }
+    ).ToListAsync();
+
+    return pacientesSi;
+}
+
+
+
+
+        
+    
     }
 }

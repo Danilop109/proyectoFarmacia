@@ -22,22 +22,25 @@ namespace Persistencia.Data.Configuration
             .HasColumnType("DateTime")
             .IsRequired();
 
+            builder.HasOne(p => p.TipoMovInventario)
+            .WithMany(p => p.MovimientoInventarios)
+            .HasForeignKey(p => p.IdTipoMovimientoInventarioFk);
+
+            builder.HasOne(p => p.Vendedor)
+            .WithMany(p => p.Vendedores)
+            .HasForeignKey(p => p.IdVendedorFk);
+
+            builder.HasOne(p => p.Cliente)
+            .WithMany(p => p.Clientes)
+            .HasForeignKey(p => p.IdClienteFk);
+
+            builder.HasOne(p => p.Inventario)
+            .WithMany(p => p.MovimientoInventarios)
+            .HasForeignKey(p => p.IdInventarioFk);
+
             builder.HasOne(p => p.FormaPago)
             .WithMany(p => p.MovimientoInventarios)
             .HasForeignKey(p => p.IdFormaPagoFk);
-
-            builder.HasOne(p => p.TipoMovInventario)
-            .WithMany(p => p.MovimientoInventarios)
-            .HasForeignKey(p => p.IdTipoMovInventarioFk);
-
-            builder.HasOne(mi => mi.ResponsableFk)
-            .WithMany(p => p.ResponsableCollection)
-            .HasForeignKey(mi => mi.IdResponsableFk);
-
-            builder.HasOne(mi => mi.ReceptorFk)
-            .WithMany(p => p.ReceptorCollection)
-            .HasForeignKey(mi => mi.IdReceptorFk);
-
         }
 
 

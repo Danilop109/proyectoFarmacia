@@ -16,13 +16,12 @@ namespace Persistencia.Data.Configuration
             .IsRequired()
             .HasMaxLength(3);
 
-
             builder.Property(p => p.Precio)
             .HasColumnName("precio")
             .HasColumnType("double")
             .IsRequired();
 
-            builder.HasOne(p => p.Invintario)
+            builder.HasOne(p => p.Inventario)
             .WithMany(p => p.DetalleMovInventarios)
             .HasForeignKey(p => p.IdInventarioFk);
 

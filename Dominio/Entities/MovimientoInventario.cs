@@ -7,21 +7,21 @@ namespace Dominio.Entities
 {
     public class MovimientoInventario : BaseEntity
     {
-        public DateTime FechaVencimiento {get; set;}
         public DateTime FechaMovimiento {get; set;}
-        public int IdResponsableFk { get; set; }
-        public Persona ResponsableFk {get; set;}
-        public int IdReceptorFk {get; set;}
-        public Persona ReceptorFk {get; set;}
-        public int IdTipoMovInventarioFk {get; set;}
+        public DateTime FechaVencimiento {get; set;}
+        public int IdTipoMovimientoInventarioFk {get; set;}
         public TipoMovInventario TipoMovInventario {get; set;}
-        public int IdFormaPagoFk {get; set;}
-        public FormaPago FormaPago {get; set;}
+        public int IdVendedorFk { get; set; }
+        public Persona Vendedor { get; set; }
+        public int IdClienteFk { get; set; }
+        public Persona Cliente { get; set; }
         public int IdRecetaMedicaFk {get; set;}
         public RecetaMedica RecetaMedica {get; set;}
+        public int IdInventarioFk {get; set;}
+        public Inventario Inventario {get; set;}
+        public int IdFormaPagoFk {get; set; }
+        public FormaPago FormaPago {get; set;}
         public ICollection<DetalleMovInventario> DetalleMovInventarios {get; set;}
-        public ICollection<Producto> Productos {get; set;} = new HashSet<Producto>();   
-
 
 
 

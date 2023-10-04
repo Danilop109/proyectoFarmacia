@@ -14,8 +14,8 @@ namespace Persistencia.Data.Configuration
         {
             builder.ToTable("user");
 
-            builder.Property(n => n.Nombre)
-            .HasColumnName("Nombreuser")
+            builder.Property(n => n.Username)
+            .HasColumnName("Username")
             .HasColumnType("varchar")
             .IsRequired()
             .HasMaxLength(100);
